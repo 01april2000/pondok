@@ -37,33 +37,33 @@ export default function Header({ activeMenu, onMenuToggle }: HeaderProps) {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b">
+    <header className="bg-gradient-to-r from-slate-800 to-slate-700 shadow-lg border-b border-slate-600">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center">
           {/* Mobile menu button */}
           <button
             onClick={onMenuToggle}
-            className="lg:hidden mr-4 p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+            className="lg:hidden mr-4 p-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-2xl font-bold text-white">
               {getPageTitle()}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-slate-300">
               {getPageDescription()}
             </p>
           </div>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full flex items-center justify-center shadow-md">
               <span className="text-white text-sm font-semibold">A</span>
             </div>
-            <span className="text-gray-700">Admin</span>
+            <span className="text-slate-200 font-medium">Admin</span>
           </div>
         </div>
       </div>

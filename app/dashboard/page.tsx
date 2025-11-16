@@ -30,7 +30,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100">
      
       {/* Render the appropriate dashboard component */}
       {renderDashboardComponent()}

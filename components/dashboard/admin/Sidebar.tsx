@@ -13,6 +13,7 @@ import {
   ChevronRight,
   BarChart3
 } from 'lucide-react';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface MenuItem {
   key: string;

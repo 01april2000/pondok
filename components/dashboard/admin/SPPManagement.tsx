@@ -21,6 +21,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SPPClass {
   name: string;
@@ -152,12 +153,12 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
   return (
     <>
       {/* SPP Pricing Management */}
-      <div className="bg-white rounded-lg shadow mb-6">
-        <div className="px-6 py-4 border-b flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-800">SPP Management</h3>
+      <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-xl mb-6 border border-slate-600">
+        <div className="px-6 py-4 border-b border-slate-600 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-white">SPP Management</h3>
           <button
             onClick={onAddNewClass}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-2 rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02]"
           >
             Tambah Kelas
           </button>
@@ -166,19 +167,19 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
           <div className="overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Kelas</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">SPP/Bulanan</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">SPP/Semester</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                <tr className="bg-slate-900/50">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Kelas</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">SPP/Bulanan</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">SPP/Semester</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-slate-600">
                 {sppClasses.map((classItem, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm text-gray-900">{classItem.name}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{classItem.monthly}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{classItem.semester}</td>
+                  <tr key={index} className="hover:bg-slate-600/50 transition-colors">
+                    <td className="px-4 py-3 text-sm text-slate-100">{classItem.name}</td>
+                    <td className="px-4 py-3 text-sm text-slate-100">{classItem.monthly}</td>
+                    <td className="px-4 py-3 text-sm text-slate-100">{classItem.semester}</td>
                     <td className="px-4 py-3 text-sm">
                       <button
                         onClick={() => onEditModalOpen(
@@ -186,14 +187,14 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                           classItem.monthly.replace(/[Rp .]/g, ''),
                           classItem.semester.replace(/[Rp .]/g, '')
                         )}
-                        className="text-blue-600 hover:text-blue-800 mr-3 inline-flex items-center"
+                        className="text-emerald-400 hover:text-emerald-300 mr-3 inline-flex items-center transition-colors"
                       >
                         <Edit className="w-4 h-4 mr-1" />
                         Edit
                       </button>
                       <button
                         onClick={() => onDeleteClass(classItem.name)}
-                        className="text-red-600 hover:text-red-800 inline-flex items-center"
+                        className="text-red-400 hover:text-red-300 inline-flex items-center transition-colors"
                       >
                         <Trash2 className="w-4 h-4 mr-1" />
                         Delete
@@ -208,15 +209,15 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b flex items-center justify-between">
+      <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-xl border border-slate-600">
+        <div className="px-6 py-4 border-b border-slate-600 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h3 className="text-lg font-semibold text-gray-800">Riwayat Transaksi SPP</h3>
+            <h3 className="text-lg font-semibold text-white">Riwayat Transaksi SPP</h3>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setShowSearchCommand(true)}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-slate-300 border-slate-500 hover:bg-slate-600 hover:text-white"
             >
               Search...
             </Button>
@@ -225,51 +226,63 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                 variant="outline"
                 size="sm"
                 onClick={handleCloseSearch}
-                className="text-blue-600 hover:text-blue-800"
+                className="text-emerald-400 border-emerald-500 hover:bg-emerald-600 hover:text-white"
               >
                 Tampilkan Semua
               </Button>
             )}
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-slate-400">
               {filteredTransactions.length} transaksi
             </span>
             <button
               onClick={() => setShowAllTransactions(true)}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
             >
               View All →
             </button>
           </div>
         </div>
-        <div className="p-6">
+        <div className="p-4">
           <div className="space-y-4">
             {currentTransactions.length > 0 ? (
               currentTransactions.map((transaction) => (
-                <div key={transaction.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className={`w-10 h-10 bg-${transaction.statusColor}-100 rounded-full flex items-center justify-center`}>
-                        <DollarSign className={`w-5 h-5 text-${transaction.statusColor}-600`} />
+                      <div className={`w-10 h-10 ${
+                        transaction.statusColor === 'green' ? 'bg-emerald-500/20' :
+                        transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' :
+                        'bg-red-500/20'
+                      } rounded-full flex items-center justify-center`}>
+                        <DollarSign className={`w-5 h-5 ${
+                          transaction.statusColor === 'green' ? 'text-emerald-400' :
+                          transaction.statusColor === 'yellow' ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`} />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">{transaction.name}</h4>
-                        <p className="text-sm text-gray-600">{transaction.description}</p>
+                        <h4 className="font-medium text-slate-100">{transaction.name}</h4>
+                        <p className="text-sm text-slate-400">{transaction.description}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-green-600">{transaction.amount}</p>
-                      <p className="text-sm text-gray-500">{transaction.time}</p>
+                      <p className="font-semibold text-emerald-400">{transaction.amount}</p>
+                      <p className="text-sm text-slate-400">{transaction.time}</p>
                     </div>
                   </div>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${transaction.statusColor}-100 text-${transaction.statusColor}-800`}>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' :
+                      transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
+                      'bg-red-500/20 text-red-400'
+                    }`}>
                       {transaction.status}
                     </span>
                     <button
                       onClick={() => setSelectedTransaction(transaction)}
-                      className="text-blue-600 hover:text-blue-800 text-sm inline-flex items-center"
+                      className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
                     >
                       <Eye className="w-4 h-4 mr-1" />
                       View Details
@@ -278,7 +291,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                 </div>
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-slate-400">
                 Tidak ada transaksi yang ditemukan untuk "{searchTerm}"
               </div>
             )}
@@ -295,7 +308,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                       className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                     />
                   </PaginationItem>
-                  
+                     
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <PaginationItem key={page}>
                       <PaginationLink
@@ -307,7 +320,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                       </PaginationLink>
                     </PaginationItem>
                   ))}
-                  
+                     
                   <PaginationItem>
                     <PaginationNext
                       onClick={() => handlePageChange(currentPage + 1)}
@@ -323,55 +336,59 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
 
       {/* Transaction Details Alert */}
       {selectedTransaction && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-            <div className="flex items-center justify-between p-4 border-b">
-              <AlertTitle className="text-lg font-semibold">Detail Transaksi</AlertTitle>
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full border border-slate-600">
+            <div className="flex items-center justify-between p-4 border-b border-slate-600">
+              <AlertTitle className="text-lg font-semibold text-white">Detail Transaksi</AlertTitle>
               <button
                 onClick={() => setSelectedTransaction(null)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-slate-400 hover:text-slate-200 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-4">
-              <Alert>
+              <Alert className="bg-slate-900/50 border-slate-600">
                 <AlertDescription className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-500">ID Transaksi</p>
-                      <p className="text-sm font-semibold">#{selectedTransaction.id}</p>
+                      <p className="text-sm font-medium text-slate-400">ID Transaksi</p>
+                      <p className="text-sm font-semibold text-slate-100">#{selectedTransaction.id}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Status</p>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${selectedTransaction.statusColor}-100 text-${selectedTransaction.statusColor}-800`}>
+                      <p className="text-sm font-medium text-slate-400">Status</p>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        selectedTransaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' : 
+                        selectedTransaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' : 
+                        'bg-red-500/20 text-red-400'
+                      }`}>
                         {selectedTransaction.status}
                       </span>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-sm font-medium text-gray-500">Nama Siswa</p>
-                      <p className="text-sm font-semibold">{selectedTransaction.name}</p>
+                      <p className="text-sm font-medium text-slate-400">Nama Siswa</p>
+                      <p className="text-sm font-semibold text-slate-100">{selectedTransaction.name}</p>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-sm font-medium text-gray-500">Deskripsi</p>
-                      <p className="text-sm">{selectedTransaction.description}</p>
+                      <p className="text-sm font-medium text-slate-400">Deskripsi</p>
+                      <p className="text-sm text-slate-200">{selectedTransaction.description}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Jumlah</p>
-                      <p className="text-sm font-semibold text-green-600">{selectedTransaction.amount}</p>
+                      <p className="text-sm font-medium text-slate-400">Jumlah</p>
+                      <p className="text-sm font-semibold text-emerald-400">{selectedTransaction.amount}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Waktu</p>
-                      <p className="text-sm">{selectedTransaction.time}</p>
+                      <p className="text-sm font-medium text-slate-400">Waktu</p>
+                      <p className="text-sm text-slate-200">{selectedTransaction.time}</p>
                     </div>
                   </div>
                 </AlertDescription>
               </Alert>
             </div>
-            <div className="flex justify-end p-4 border-t">
+            <div className="flex justify-end p-4 border-t border-slate-600">
               <button
                 onClick={() => setSelectedTransaction(null)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 Tutup
               </button>
@@ -382,38 +399,50 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
 
       {/* All Transactions Modal */}
       {showAllTransactions && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full flex flex-col" style={{ maxHeight: '80vh' }}>
-            <div className="flex items-center justify-between p-4 border-b flex-shrink-0">
-              <h2 className="text-xl font-semibold">Semua Transaksi SPP</h2>
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-4xl w-full flex flex-col border border-slate-600" style={{ maxHeight: '80vh' }}>
+            <div className="flex items-center justify-between p-4 border-b border-slate-600 flex-shrink-0">
+              <h2 className="text-xl font-semibold text-white">Semua Transaksi SPP</h2>
               <button
                 onClick={() => setShowAllTransactions(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-slate-400 hover:text-slate-200 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-4" style={{ maxHeight: 'calc(80vh - 140px)' }}>
+            <div className="flex-1 p-4 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 140px)' }}>
               <div className="space-y-3">
                 {transactions.map((transaction) => (
-                  <div key={transaction.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className={`w-10 h-10 bg-${transaction.statusColor}-100 rounded-full flex items-center justify-center`}>
-                          <DollarSign className={`w-5 h-5 text-${transaction.statusColor}-600`} />
+                        <div className={`w-10 h-10 ${
+                          transaction.statusColor === 'green' ? 'bg-emerald-500/20' : 
+                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' : 
+                          'bg-red-500/20'
+                        } rounded-full flex items-center justify-center`}>
+                          <DollarSign className={`w-5 h-5 ${
+                            transaction.statusColor === 'green' ? 'text-emerald-400' : 
+                            transaction.statusColor === 'yellow' ? 'text-yellow-400' : 
+                            'text-red-400'
+                          }`} />
                         </div>
                         <div>
-                          <h4 className="font-medium text-gray-900">{transaction.name}</h4>
-                          <p className="text-sm text-gray-600">{transaction.description}</p>
+                          <h4 className="font-medium text-slate-100">{transaction.name}</h4>
+                          <p className="text-sm text-slate-400">{transaction.description}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-green-600">{transaction.amount}</p>
-                        <p className="text-sm text-gray-500">{transaction.time}</p>
+                        <p className="font-semibold text-emerald-400">{transaction.amount}</p>
+                        <p className="text-sm text-slate-400">{transaction.time}</p>
                       </div>
                     </div>
                     <div className="mt-3 flex items-center justify-between">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${transaction.statusColor}-100 text-${transaction.statusColor}-800`}>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' : 
+                        transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' : 
+                        'bg-red-500/20 text-red-400'
+                      }`}>
                         {transaction.status}
                       </span>
                       <button
@@ -421,7 +450,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                           setSelectedTransaction(transaction);
                           setShowAllTransactions(false);
                         }}
-                        className="text-blue-600 hover:text-blue-800 text-sm inline-flex items-center"
+                        className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         View Details
@@ -431,10 +460,10 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                 ))}
               </div>
             </div>
-            <div className="flex justify-end p-4 border-t flex-shrink-0">
+            <div className="flex justify-end p-4 border-t border-slate-600 flex-shrink-0">
               <button
                 onClick={() => setShowAllTransactions(false)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 Tutup
               </button>
@@ -445,29 +474,39 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
 
       {/* Search Command Dialog */}
       {showSearchCommand && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-            <Command className="rounded-lg border shadow-md">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full border border-slate-600">
+            <Command className="rounded-lg border border-slate-600 bg-slate-900/50">
               <CommandInput
                 placeholder="Cari transaksi SPP..."
                 value={searchTerm}
                 onValueChange={setSearchTerm}
+                className="text-slate-100 placeholder:text-slate-400"
               />
               <CommandList>
-                <CommandEmpty>Tidak ada transaksi SPP yang ditemukan.</CommandEmpty>
-                <CommandGroup heading="Transaksi SPP">
+                <CommandEmpty className="text-slate-400">Tidak ada transaksi SPP yang ditemukan.</CommandEmpty>
+                <CommandGroup heading={<span className="text-slate-400">Transaksi SPP</span>}>
                   {filteredTransactions.slice(0, 10).map((transaction) => (
                     <CommandItem
                       key={transaction.id}
                       onSelect={() => handleSearchSelect(transaction.name)}
+                      className="text-slate-100 hover:bg-slate-700/50 hover:text-white"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className={`w-8 h-8 bg-${transaction.statusColor}-100 rounded-full flex items-center justify-center`}>
-                          <DollarSign className={`w-4 h-4 text-${transaction.statusColor}-600`} />
+                        <div className={`w-8 h-8 ${
+                          transaction.statusColor === 'green' ? 'bg-emerald-500/20' : 
+                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' : 
+                          'bg-red-500/20'
+                        } rounded-full flex items-center justify-center`}>
+                          <DollarSign className={`w-4 h-4 ${
+                            transaction.statusColor === 'green' ? 'text-emerald-400' : 
+                            transaction.statusColor === 'yellow' ? 'text-yellow-400' : 
+                            'text-red-400'
+                          }`} />
                         </div>
                         <div>
-                          <div className="font-medium">{transaction.name}</div>
-                          <div className="text-sm text-gray-500">{transaction.description}</div>
+                          <div className="font-medium text-slate-100">{transaction.name}</div>
+                          <div className="text-sm text-slate-400">{transaction.description}</div>
                         </div>
                       </div>
                     </CommandItem>
@@ -475,10 +514,11 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                 </CommandGroup>
               </CommandList>
             </Command>
-            <div className="flex justify-end p-4 border-t">
+            <div className="flex justify-end p-4 border-t border-slate-600">
               <Button
                 onClick={handleCloseSearch}
                 variant="outline"
+                className="border-slate-500 text-slate-300 hover:bg-slate-700 hover:text-white"
               >
                 Tutup
               </Button>
