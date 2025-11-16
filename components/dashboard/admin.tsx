@@ -94,10 +94,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
   // Santri state
   const [santriList, setSantriList] = useState([
     {
-      id: 1, nis: "2023001", name: "Ahmad Fauzi", email: "ahmad.fauzi@example.com",
-      phone: "08123456789", address: "Jl. Merdeka No. 123, Jakarta", birthDate: "2005-05-15",
-      class: "X-A", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Lunas",
+      id: 1, nis: "2023001", name: "Ahmad Fauzi", parentName: "Bapak Ahmad",
+      class: "X-A", sppStatus: "Lunas", syahriahStatus: "Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         unpaidMonths: [],
@@ -112,10 +110,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 2, nis: "2023002", name: "Siti Nurhaliza", email: "siti.nurhaliza@example.com",
-      phone: "08234567890", address: "Jl. Sudirman No. 456, Bandung", birthDate: "2006-03-22",
-      class: "XI-B", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Belum Lunas", syahriahStatus: "Lunas",
+      id: 2, nis: "2023002", name: "Siti Nurhaliza", parentName: "Ibu Siti",
+      class: "XI-B", sppStatus: "Belum Lunas", syahriahStatus: "Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus"],
         unpaidMonths: ["September", "Oktober", "November", "Desember"],
@@ -130,10 +126,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 3, nis: "2023003", name: "Budi Santoso", email: "budi.santoso@example.com",
-      phone: "08345678901", address: "Jl. Gatot Subroto No. 789, Surabaya", birthDate: "2005-11-08",
-      class: "X-C", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Belum Lunas",
+      id: 3, nis: "2023003", name: "Budi Santoso", parentName: "Bapak Budi",
+      class: "X-C", sppStatus: "Lunas", syahriahStatus: "Belum Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         unpaidMonths: [],
@@ -148,10 +142,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 4, nis: "2023004", name: "Rina Wijaya", email: "rina.wijaya@example.com",
-      phone: "08456789012", address: "Jl. Thamrin No. 321, Medan", birthDate: "2006-07-30",
-      class: "XII-A", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Lunas",
+      id: 4, nis: "2023004", name: "Rina Wijaya", parentName: "Ibu Rina",
+      class: "XII-A", sppStatus: "Lunas", syahriahStatus: "Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         unpaidMonths: [],
@@ -166,10 +158,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 5, nis: "2023005", name: "Andi Pratama", email: "andi.pratama@example.com",
-      phone: "08567890123", address: "Jl. Sudirman No. 654, Semarang", birthDate: "2005-09-17",
-      class: "XI-C", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Cuti",
-      sppStatus: "Belum Lunas", syahriahStatus: "Belum Lunas",
+      id: 5, nis: "2023005", name: "Andi Pratama", parentName: "Bapak Andi",
+      class: "XI-C", sppStatus: "Belum Lunas", syahriahStatus: "Belum Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April"],
         unpaidMonths: ["Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
@@ -184,10 +174,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 6, nis: "2023006", name: "Dewi Lestari", email: "dewi.lestari@example.com",
-      phone: "08678901234", address: "Jl. Merdeka No. 987, Yogyakarta", birthDate: "2006-01-25",
-      class: "X-B", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Lunas",
+      id: 6, nis: "2023006", name: "Dewi Lestari", parentName: "Ibu Dewi",
+      class: "X-B", sppStatus: "Lunas", syahriahStatus: "Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         unpaidMonths: [],
@@ -202,10 +190,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 7, nis: "2023007", name: "Eko Susilo", email: "eko.susilo@example.com",
-      phone: "08789012345", address: "Jl. Gatot Subroto No. 246, Malang", birthDate: "2005-12-10",
-      class: "XII-B", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Belum Lunas", syahriahStatus: "Lunas",
+      id: 7, nis: "2023007", name: "Eko Susilo", parentName: "Bapak Eko",
+      class: "XII-B", sppStatus: "Belum Lunas", syahriahStatus: "Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli"],
         unpaidMonths: ["Agustus", "September", "Oktober", "November", "Desember"],
@@ -220,10 +206,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       }
     },
     {
-      id: 8, nis: "2023008", name: "Fitri Handayani", email: "fitri.handayani@example.com",
-      phone: "08890123456", address: "Jl. Thamrin No. 135, Palembang", birthDate: "2006-04-05",
-      class: "X-D", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Belum Lunas",
+      id: 8, nis: "2023008", name: "Fitri Handayani", parentName: "Ibu Fitri",
+      class: "X-D", sppStatus: "Lunas", syahriahStatus: "Belum Lunas",
       sppPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober"],
         unpaidMonths: ["November", "Desember"],

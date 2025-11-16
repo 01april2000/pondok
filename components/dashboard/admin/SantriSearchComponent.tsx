@@ -16,14 +16,8 @@ interface Santri {
   id: number;
   nis: string;
   name: string;
-  email: string;
-  phone: string;
-  address: string;
-  birthDate: string;
+  parentName: string;
   class: string;
-  gender: string;
-  enrollmentDate: string;
-  status: string;
   sppStatus: string;
   syahriahStatus: string;
 }
@@ -58,8 +52,7 @@ export default function SantriSearchComponent({
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.nis.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.class.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.status.toLowerCase().includes(searchTerm.toLowerCase())
+    item.parentName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSearchSelect = (value: string) => {
@@ -82,13 +75,11 @@ export default function SantriSearchComponent({
     if (setCurrentPage) setCurrentPage(1);
   };
 
-  const getStatusColor = (status: string) => {
+  const getPaymentStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'aktif':
+      case 'lunas':
         return 'bg-emerald-500/20 text-emerald-400';
-      case 'cuti':
-        return 'bg-yellow-500/20 text-yellow-400';
-      case 'keluar':
+      case 'belum lunas':
         return 'bg-red-500/20 text-red-400';
       default:
         return 'bg-slate-500/20 text-slate-400';
@@ -147,8 +138,8 @@ export default function SantriSearchComponent({
                       className="text-slate-100 data-[selected=true]:bg-slate-700 data-[selected=true]:text-white"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className={`w-8 h-8 ${getStatusColor(item.status).split(' ')[0]} rounded-full flex items-center justify-center`}>
-                          <User className={`w-4 h-4 ${getStatusColor(item.status).split(' ')[1]}`} />
+                        <div className={`w-8 h-8 ${getPaymentStatusColor(item.sppStatus).split(' ')[0]} rounded-full flex items-center justify-center`}>
+                          <User className={`w-4 h-4 ${getPaymentStatusColor(item.sppStatus).split(' ')[1]}`} />
                         </div>
                         <div>
                           <div className="font-medium text-slate-100">{item.name}</div>

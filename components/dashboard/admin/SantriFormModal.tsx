@@ -3,19 +3,14 @@
 import { useState, useEffect } from "react";
 import { X, User, Mail, Phone, Calendar, MapPin, BookOpen, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CustomDropdown } from "@/components/ui/custom-dropdown";
 
 interface Santri {
   id?: number;
   nis: string;
   name: string;
-  email: string;
-  phone: string;
-  address: string;
-  birthDate: string;
+  parentName: string;
   class: string;
-  gender: string;
-  enrollmentDate: string;
-  status: string;
   sppStatus: string;
   syahriahStatus: string;
 }
@@ -30,8 +25,7 @@ interface SantriFormModalProps {
 
 const classOptions = [
   "X-A", "X-B", "X-C", "X-D",
-  "XI-A", "XI-B", "XI-C", "XI-D",
-  "XII-A", "XII-B", "XII-C", "XII-D"
+  "XI-A", "XI-B"
 ];
 
 const statusOptions = ["Aktif", "Cuti", "Keluar"];
@@ -41,14 +35,8 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
   const [formData, setFormData] = useState<Santri>({
     nis: "",
     name: "",
-    email: "",
-    phone: "",
-    address: "",
-    birthDate: "",
+    parentName: "",
     class: "",
-    gender: "Laki-laki",
-    enrollmentDate: "",
-    status: "Aktif",
     sppStatus: "Belum Lunas",
     syahriahStatus: "Belum Lunas"
   });
@@ -63,14 +51,8 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
       setFormData({
         nis: "",
         name: "",
-        email: "",
-        phone: "",
-        address: "",
-        birthDate: "",
+        parentName: "",
         class: "",
-        gender: "Laki-laki",
-        enrollmentDate: "",
-        status: "Aktif",
         sppStatus: "Belum Lunas",
         syahriahStatus: "Belum Lunas"
       });
@@ -88,30 +70,12 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
       newErrors.name = "Nama wajib diisi";
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email wajib diisi";
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = "Format email tidak valid";
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "No. telepon wajib diisi";
-    }
-
-    if (!formData.address.trim()) {
-      newErrors.address = "Alamat wajib diisi";
-    }
-
-    if (!formData.birthDate) {
-      newErrors.birthDate = "Tanggal lahir wajib diisi";
+    if (!formData.parentName.trim()) {
+      newErrors.parentName = "Nama orang tua wajib diisi";
     }
 
     if (!formData.class) {
       newErrors.class = "Kelas wajib dipilih";
-    }
-
-    if (!formData.enrollmentDate) {
-      newErrors.enrollmentDate = "Tanggal masuk wajib diisi";
     }
 
     setErrors(newErrors);
@@ -200,76 +164,23 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
               {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
             </div>
 
-            {/* Email */}
+            {/* Nama Orang Tua */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                <Mail className="inline w-4 h-4 mr-1" />
-                Email
+                <Users className="inline w-4 h-4 mr-1" />
+                Nama Orang Tua
               </label>
               <input
-                type="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                name="parentName"
+                value={formData.parentName}
                 onChange={handleChange}
                 className={`w-full px-3 py-2 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.email ? "border-red-500" : "border-slate-600"
+                  errors.parentName ? "border-red-500" : "border-slate-600"
                 }`}
-                placeholder="email@example.com"
+                placeholder="Masukkan nama orang tua"
               />
-              {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
-            </div>
-
-            {/* No. Telepon */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                <Phone className="inline w-4 h-4 mr-1" />
-                No. Telepon
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.phone ? "border-red-500" : "border-slate-600"
-                }`}
-                placeholder="08xxxxxxxxxx"
-              />
-              {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
-            </div>
-
-            {/* Tanggal Lahir */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                <Calendar className="inline w-4 h-4 mr-1" />
-                Tanggal Lahir
-              </label>
-              <input
-                type="date"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.birthDate ? "border-red-500" : "border-slate-600"
-                }`}
-              />
-              {errors.birthDate && <p className="mt-1 text-sm text-red-400">{errors.birthDate}</p>}
-            </div>
-
-            {/* Jenis Kelamin */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Jenis Kelamin
-              </label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-              </select>
+              {errors.parentName && <p className="mt-1 text-sm text-red-400">{errors.parentName}</p>}
             </div>
 
             {/* Kelas */}
@@ -278,55 +189,14 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
                 <BookOpen className="inline w-4 h-4 mr-1" />
                 Kelas
               </label>
-              <select
-                name="class"
+              <CustomDropdown
+                options={classOptions}
                 value={formData.class}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.class ? "border-red-500" : "border-slate-600"
-                }`}
-              >
-                <option value="">Pilih Kelas</option>
-                {classOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
-              {errors.class && <p className="mt-1 text-sm text-red-400">{errors.class}</p>}
-            </div>
-
-            {/* Tanggal Masuk */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                <Calendar className="inline w-4 h-4 mr-1" />
-                Tanggal Masuk
-              </label>
-              <input
-                type="date"
-                name="enrollmentDate"
-                value={formData.enrollmentDate}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.enrollmentDate ? "border-red-500" : "border-slate-600"
-                }`}
+                onChange={(value) => setFormData(prev => ({ ...prev, class: value }))}
+                placeholder="Pilih Kelas"
+                className={errors.class ? "border-red-500" : "border-slate-600"}
               />
-              {errors.enrollmentDate && <p className="mt-1 text-sm text-red-400">{errors.enrollmentDate}</p>}
-            </div>
-
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Status
-              </label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                {statusOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
+              {errors.class && <p className="mt-1 text-sm text-red-400">{errors.class}</p>}
             </div>
 
             {/* Status SPP */}
@@ -334,16 +204,12 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 Status SPP
               </label>
-              <select
-                name="sppStatus"
+              <CustomDropdown
+                options={paymentStatusOptions}
                 value={formData.sppStatus}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                {paymentStatusOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
+                onChange={(value) => setFormData(prev => ({ ...prev, sppStatus: value }))}
+                placeholder="Pilih Status SPP"
+              />
             </div>
 
             {/* Status Syahriah */}
@@ -351,36 +217,13 @@ export default function SantriFormModal({ isOpen, onClose, mode, initialData, on
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 Status Syahriah
               </label>
-              <select
-                name="syahriahStatus"
+              <CustomDropdown
+                options={paymentStatusOptions}
                 value={formData.syahriahStatus}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                {paymentStatusOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
+                onChange={(value) => setFormData(prev => ({ ...prev, syahriahStatus: value }))}
+                placeholder="Pilih Status Syahriah"
+              />
             </div>
-          </div>
-
-          {/* Alamat */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              <MapPin className="inline w-4 h-4 mr-1" />
-              Alamat
-            </label>
-            <textarea
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              rows={3}
-              className={`w-full px-3 py-2 bg-slate-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                errors.address ? "border-red-500" : "border-slate-600"
-              }`}
-              placeholder="Masukkan alamat lengkap"
-            />
-            {errors.address && <p className="mt-1 text-sm text-red-400">{errors.address}</p>}
           </div>
 
           {/* Buttons */}
