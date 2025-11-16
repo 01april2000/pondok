@@ -13,15 +13,8 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import SearchComponent from "./SearchComponent";
 
 interface SyahriahClass {
   name: string;
@@ -68,7 +61,6 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showSearchCommand, setShowSearchCommand] = useState(false);
   const [monthlyCurrentPage, setMonthlyCurrentPage] = useState(1);
 
   const itemsPerPage = 5;
@@ -289,20 +281,19 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
 
   const handleSearchSelect = (value: string) => {
     setSearchTerm(value);
-    setShowSearchCommand(false);
     setCurrentPage(1); // Reset to first page when searching
     setMonthlyCurrentPage(1); // Reset monthly payment page when searching
   };
 
   const handleCloseSearch = () => {
     setSearchTerm("");
-    setShowSearchCommand(false);
     setCurrentPage(1); // Reset to first page when clearing search
     setMonthlyCurrentPage(1); // Reset monthly payment page when clearing search
   };
 
   return (
     <>
+     <ScrollArea className="h-[calc(100vh-150px)]">
       {/* Syahriah Pricing Management */}
       <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-xl mb-6 border border-slate-600">
         <div className="px-6 py-4 border-b border-slate-600 flex items-center justify-between">
@@ -478,24 +469,19 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
         <div className="px-6 py-4 border-b border-slate-600 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h3 className="text-lg font-semibold text-white">Riwayat Transaksi Syahriah</h3>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowSearchCommand(true)}
-              className="text-slate-300 border-slate-500 hover:bg-slate-600 hover:text-white"
-            >
-              Search...
-            </Button>
-            {searchTerm && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleCloseSearch}
-                className="text-emerald-400 border-emerald-500 hover:bg-emerald-600 hover:text-white"
-              >
-                Tampilkan Semua
-              </Button>
-            )}
+            <SearchComponent
+              items={transactions}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              placeholder="Cari transaksi..."
+              title="Transaksi"
+              onSearchSelect={handleSearchSelect}
+              onCloseSearch={handleCloseSearch}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              monthlyCurrentPage={monthlyCurrentPage}
+              setMonthlyCurrentPage={setMonthlyCurrentPage}
+            />
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-slate-400">
@@ -675,7 +661,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <ScrollArea className="flex-1 p-4" style={{ maxHeight: 'calc(80vh - 140px)' }}>
+            <ScrollArea className="h-[60vh] p-4">
               <div className="space-y-3">
                 {transactions.map((transaction) => (
                   <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-600/30 transition-all duration-300 hover:shadow-lg">
@@ -763,7 +749,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <ScrollArea className="flex-1 p-4">
+            <ScrollArea className="h-[70vh] p-4">
               <div className="overflow-x-auto">
                 <table className="w-full table-auto">
                   <thead className="sticky top-0 bg-slate-800">
@@ -825,61 +811,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
           </div>
         </div>
       )}
-
-      {/* Search Command Dialog */}
-      {showSearchCommand && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full border border-slate-600">
-            <Command className="rounded-lg border border-slate-600 bg-slate-900/50">
-              <CommandInput
-                placeholder="Cari transaksi..."
-                value={searchTerm}
-                onValueChange={setSearchTerm}
-                className="text-slate-100 placeholder:text-slate-400"
-              />
-              <CommandList>
-                <CommandEmpty className="text-slate-400">Tidak ada transaksi yang ditemukan.</CommandEmpty>
-                <CommandGroup heading={<span className="text-slate-400">Transaksi</span>}>
-                  {filteredTransactions.slice(0, 10).map((transaction) => (
-                    <CommandItem
-                      key={transaction.id}
-                      onSelect={() => handleSearchSelect(transaction.name)}
-                      className="text-slate-100 data-[selected=true]:bg-slate-600/50"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-8 h-8 ${
-                          transaction.statusColor === 'green' ? 'bg-emerald-500/20' :
-                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' :
-                          'bg-red-500/20'
-                        } rounded-full flex items-center justify-center`}>
-                          <DollarSign className={`w-4 h-4 ${
-                            transaction.statusColor === 'green' ? 'text-emerald-400' :
-                            transaction.statusColor === 'yellow' ? 'text-yellow-400' :
-                            'text-red-400'
-                          }`} />
-                        </div>
-                        <div>
-                          <div className="font-medium text-slate-100">{transaction.name}</div>
-                          <div className="text-sm text-slate-400">{transaction.description}</div>
-                        </div>
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-            <div className="flex justify-end p-4 border-t border-slate-600">
-              <Button
-                onClick={handleCloseSearch}
-                variant="outline"
-                className="border-slate-500 text-slate-300 hover:bg-slate-600 hover:text-white"
-              >
-                Tutup
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+    </ScrollArea>
     </>
   );
 }

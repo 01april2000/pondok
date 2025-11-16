@@ -112,7 +112,8 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
       </div>
       
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav className="flex-1 px-3 py-4">
+        <ScrollArea className="h-[calc(100vh-8rem)]">
         <div className="space-y-1">
           {menuItems.map((item) => (
             <div key={item.key} className="group">
@@ -186,6 +187,7 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
             </div>
           ))}
         </div>
+        </ScrollArea>
       </nav>
       
       {/* Footer */}

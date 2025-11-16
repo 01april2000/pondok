@@ -8,6 +8,7 @@ import SPPManagement from "./admin/SPPManagement";
 import ClassFormModal from "./admin/ClassFormModal";
 import SyahriahManagement from "./admin/SyahriahManagement";
 import SyahriahFormModal from "./admin/SyahriahFormModal";
+import SearchComponent from "./admin/SearchComponent";
 
 interface MenuItem {
   key: string;

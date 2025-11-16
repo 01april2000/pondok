@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ClassFormModalProps {
   isOpen: boolean;
@@ -70,7 +71,8 @@ export default function ClassFormModal({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <ScrollArea className="h-[50vh]">
+          <div className="grid gap-4 py-4 pr-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <label htmlFor="className" className="text-right text-slate-300">
               Class Name
@@ -110,7 +112,8 @@ export default function ClassFormModal({
               placeholder="e.g., 900000"
             />
           </div>
-        </div>
+          </div>
+        </ScrollArea>
         <DialogFooter>
           <button
             type="button"
