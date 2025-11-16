@@ -5,11 +5,9 @@ import Link from "next/link";
 import Sidebar from "./admin/Sidebar";
 import Header from "./admin/Header";
 import SPPManagement from "./admin/SPPManagement";
-import EditSPPModal from "./admin/EditSPPModal";
-import AddClassDialog from "./admin/AddClassDialog";
+import ClassFormModal from "./admin/ClassFormModal";
 import SyahriahManagement from "./admin/SyahriahManagement";
-import EditSyahriahModal from "./admin/EditSyahriahModal";
-import AddSyahriahDialog from "./admin/AddSyahriahDialog";
+import SyahriahFormModal from "./admin/SyahriahFormModal";
 
 interface MenuItem {
   key: string;
@@ -62,8 +60,8 @@ const menuItems: MenuItem[] = [
 export default function Admin() {
   const [activeMenu, setActiveMenu] = useState("spp");
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isAddClassDialogOpen, setIsAddClassDialogOpen] = useState(false);
+  const [isClassModalOpen, setIsClassModalOpen] = useState(false);
+  const [classModalMode, setClassModalMode] = useState<"add" | "edit">("add");
   const [editingClass, setEditingClass] = useState("");
   const [monthlySpp, setMonthlySpp] = useState("");
   const [semesterSpp, setSemesterSpp] = useState("");
@@ -75,8 +73,8 @@ export default function Admin() {
   ]);
   
   // Syahriah state
-  const [isEditSyahriahModalOpen, setIsEditSyahriahModalOpen] = useState(false);
-  const [isAddSyahriahDialogOpen, setIsAddSyahriahDialogOpen] = useState(false);
+  const [isSyahriahModalOpen, setIsSyahriahModalOpen] = useState(false);
+  const [syahriahModalMode, setSyahriahModalMode] = useState<"add" | "edit">("add");
   const [editingSyahriahClass, setEditingSyahriahClass] = useState("");
   const [monthlySyahriah, setMonthlySyahriah] = useState("");
   const [yearlySyahriah, setYearlySyahriah] = useState("");
@@ -105,22 +103,35 @@ export default function Admin() {
     setEditingClass(className);
     setMonthlySpp(monthly);
     setSemesterSpp(semester);
-    setIsEditModalOpen(true);
+    setClassModalMode("edit");
+    setIsClassModalOpen(true);
   };
 
-  const handleSaveSPP = () => {
-    setSppClasses(prevClasses =>
-      prevClasses.map(classItem =>
-        classItem.name === editingClass
-          ? {
-              ...classItem,
-              monthly: `Rp ${parseInt(monthlySpp).toLocaleString('id-ID')}`,
-              semester: `Rp ${parseInt(semesterSpp).toLocaleString('id-ID')}`
-            }
-          : classItem
-      )
-    );
-    setIsEditModalOpen(false);
+  const handleSaveSPP = (className: string, monthlySpp: string, semesterSpp: string) => {
+    if (classModalMode === "edit") {
+      setSppClasses(prevClasses =>
+        prevClasses.map(classItem =>
+          classItem.name === editingClass
+            ? {
+                ...classItem,
+                monthly: `Rp ${parseInt(monthlySpp).toLocaleString('id-ID')}`,
+                semester: `Rp ${parseInt(semesterSpp).toLocaleString('id-ID')}`
+              }
+            : classItem
+        )
+      );
+    } else {
+      // Add new class
+      setSppClasses(prevClasses => [
+        ...prevClasses,
+        {
+          name: className,
+          monthly: `Rp ${parseInt(monthlySpp).toLocaleString('id-ID')}`,
+          semester: `Rp ${parseInt(semesterSpp).toLocaleString('id-ID')}`
+        }
+      ]);
+    }
+    setIsClassModalOpen(false);
   };
 
   const handleDeleteClass = (className: string) => {
@@ -131,19 +142,9 @@ export default function Admin() {
     }
   };
 
-  const handleAddNewClass = (className: string, monthlySpp: string, semesterSpp: string) => {
-    setSppClasses(prevClasses => [
-      ...prevClasses,
-      {
-        name: className,
-        monthly: `Rp ${parseInt(monthlySpp).toLocaleString('id-ID')}`,
-        semester: `Rp ${parseInt(semesterSpp).toLocaleString('id-ID')}`
-      }
-    ]);
-  };
-
   const openAddClassDialog = () => {
-    setIsAddClassDialogOpen(true);
+    setClassModalMode("add");
+    setIsClassModalOpen(true);
   };
 
   // Syahriah handlers
@@ -151,22 +152,35 @@ export default function Admin() {
     setEditingSyahriahClass(className);
     setMonthlySyahriah(monthly);
     setYearlySyahriah(yearly);
-    setIsEditSyahriahModalOpen(true);
+    setSyahriahModalMode("edit");
+    setIsSyahriahModalOpen(true);
   };
 
-  const handleSaveSyahriah = () => {
-    setSyahriahClasses(prevClasses =>
-      prevClasses.map(classItem =>
-        classItem.name === editingSyahriahClass
-          ? {
-              ...classItem,
-              monthly: `Rp ${parseInt(monthlySyahriah).toLocaleString('id-ID')}`,
-              yearly: `Rp ${parseInt(yearlySyahriah).toLocaleString('id-ID')}`
-            }
-          : classItem
-      )
-    );
-    setIsEditSyahriahModalOpen(false);
+  const handleSaveSyahriah = (className: string, monthlySyahriah: string, yearlySyahriah: string) => {
+    if (syahriahModalMode === "edit") {
+      setSyahriahClasses(prevClasses =>
+        prevClasses.map(classItem =>
+          classItem.name === editingSyahriahClass
+            ? {
+                ...classItem,
+                monthly: `Rp ${parseInt(monthlySyahriah).toLocaleString('id-ID')}`,
+                yearly: `Rp ${parseInt(yearlySyahriah).toLocaleString('id-ID')}`
+              }
+            : classItem
+        )
+      );
+    } else {
+      // Add new class
+      setSyahriahClasses(prevClasses => [
+        ...prevClasses,
+        {
+          name: className,
+          monthly: `Rp ${parseInt(monthlySyahriah).toLocaleString('id-ID')}`,
+          yearly: `Rp ${parseInt(yearlySyahriah).toLocaleString('id-ID')}`
+        }
+      ]);
+    }
+    setIsSyahriahModalOpen(false);
   };
 
   const handleDeleteSyahriahClass = (className: string) => {
@@ -177,19 +191,9 @@ export default function Admin() {
     }
   };
 
-  const handleAddNewSyahriahClass = (className: string, monthlySyahriah: string, yearlySyahriah: string) => {
-    setSyahriahClasses(prevClasses => [
-      ...prevClasses,
-      {
-        name: className,
-        monthly: `Rp ${parseInt(monthlySyahriah).toLocaleString('id-ID')}`,
-        yearly: `Rp ${parseInt(yearlySyahriah).toLocaleString('id-ID')}`
-      }
-    ]);
-  };
-
   const openAddSyahriahDialog = () => {
-    setIsAddSyahriahDialogOpen(true);
+    setSyahriahModalMode("add");
+    setIsSyahriahModalOpen(true);
   };
 
   const handleViewDetails = (transactionId: number) => {
@@ -246,42 +250,30 @@ export default function Admin() {
         </main>
       </div>
 
-      {/* Edit SPP Modal */}
-      <EditSPPModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        onSave={handleSaveSPP}
-        editingClass={editingClass}
-        monthlySpp={monthlySpp}
-        semesterSpp={semesterSpp}
-        onMonthlySppChange={setMonthlySpp}
-        onSemesterSppChange={setSemesterSpp}
+      {/* Class Form Modal (Add/Edit) */}
+      <ClassFormModal
+        isOpen={isClassModalOpen}
+        onClose={() => setIsClassModalOpen(false)}
+        mode={classModalMode}
+        initialData={classModalMode === "edit" ? {
+          className: editingClass,
+          monthlySpp: monthlySpp,
+          semesterSpp: semesterSpp
+        } : undefined}
+        onSubmit={handleSaveSPP}
       />
 
-      {/* Add Class Dialog */}
-      <AddClassDialog
-        isOpen={isAddClassDialogOpen}
-        onClose={() => setIsAddClassDialogOpen(false)}
-        onAddClass={handleAddNewClass}
-      />
-
-      {/* Edit Syahriah Modal */}
-      <EditSyahriahModal
-        isOpen={isEditSyahriahModalOpen}
-        onClose={() => setIsEditSyahriahModalOpen(false)}
-        onSave={handleSaveSyahriah}
-        editingClass={editingSyahriahClass}
-        monthlySyahriah={monthlySyahriah}
-        yearlySyahriah={yearlySyahriah}
-        onMonthlySyahriahChange={setMonthlySyahriah}
-        onYearlySyahriahChange={setYearlySyahriah}
-      />
-
-      {/* Add Syahriah Dialog */}
-      <AddSyahriahDialog
-        isOpen={isAddSyahriahDialogOpen}
-        onClose={() => setIsAddSyahriahDialogOpen(false)}
-        onAddClass={handleAddNewSyahriahClass}
+      {/* Syahriah Form Modal (Add/Edit) */}
+      <SyahriahFormModal
+        isOpen={isSyahriahModalOpen}
+        onClose={() => setIsSyahriahModalOpen(false)}
+        mode={syahriahModalMode}
+        initialData={syahriahModalMode === "edit" ? {
+          className: editingSyahriahClass,
+          monthlySyahriah: monthlySyahriah,
+          yearlySyahriah: yearlySyahriah
+        } : undefined}
+        onSubmit={handleSaveSyahriah}
       />
     </div>
   );
