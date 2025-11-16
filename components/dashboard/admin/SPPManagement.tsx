@@ -217,7 +217,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
               variant="outline"
               size="sm"
               onClick={() => setShowSearchCommand(true)}
-              className="text-slate-300 border-slate-500 hover:bg-slate-600 hover:text-white"
+              className="text-slate-300 border-slate-500 hover:bg-slate-600 hover:text-white bg-slate-600"
             >
               Search...
             </Button>
@@ -474,8 +474,14 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
 
       {/* Search Command Dialog */}
       {showSearchCommand && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full border border-slate-600">
+        <div
+          className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowSearchCommand(false)}
+        >
+          <div
+            className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full border border-slate-600"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Command className="rounded-lg border border-slate-600 bg-slate-900/50">
               <CommandInput
                 placeholder="Cari transaksi SPP..."
@@ -514,15 +520,6 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                 </CommandGroup>
               </CommandList>
             </Command>
-            <div className="flex justify-end p-4 border-t border-slate-600">
-              <Button
-                onClick={handleCloseSearch}
-                variant="outline"
-                className="border-slate-500 text-slate-300 hover:bg-slate-700 hover:text-white"
-              >
-                Tutup
-              </Button>
-            </div>
           </div>
         </div>
       )}

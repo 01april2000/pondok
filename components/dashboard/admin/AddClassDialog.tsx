@@ -60,7 +60,7 @@ export default function AddClassDialog({ isOpen, onClose, onAddClass }: AddClass
             </label>
             <input
               id="monthlySpp"
-              type="number"
+              type="text"
               value={monthlySpp}
               onChange={(e) => setMonthlySpp(e.target.value)}
               className="col-span-3 flex h-10 w-full rounded-md border border-slate-500 bg-slate-700 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -73,7 +73,7 @@ export default function AddClassDialog({ isOpen, onClose, onAddClass }: AddClass
             </label>
             <input
               id="semesterSpp"
-              type="number"
+              type="text"
               value={semesterSpp}
               onChange={(e) => setSemesterSpp(e.target.value)}
               className="col-span-3 flex h-10 w-full rounded-md border border-slate-500 bg-slate-700 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

@@ -47,7 +47,7 @@ export default function EditSPPModal({
                 Monthly SPP (Rp)
               </label>
               <input
-                type="number"
+                type="text"
                 value={monthlySpp}
                 onChange={(e) => onMonthlySppChange(e.target.value)}
                 className="w-full px-3 py-2 border border-slate-500 rounded-md bg-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder:text-slate-400"
@@ -59,7 +59,7 @@ export default function EditSPPModal({
                 Semester SPP (Rp)
               </label>
               <input
-                type="number"
+                type="text"
                 value={semesterSpp}
                 onChange={(e) => onSemesterSppChange(e.target.value)}
                 className="w-full px-3 py-2 border border-slate-500 rounded-md bg-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder:text-slate-400"

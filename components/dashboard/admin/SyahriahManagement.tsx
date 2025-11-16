@@ -844,7 +844,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
                     <CommandItem
                       key={transaction.id}
                       onSelect={() => handleSearchSelect(transaction.name)}
-                      className="text-slate-100 hover:bg-slate-600/50"
+                      className="text-slate-100 data-[selected=true]:bg-slate-600/50"
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-8 h-8 ${
