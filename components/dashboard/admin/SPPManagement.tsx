@@ -490,7 +490,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                     <CommandItem
                       key={transaction.id}
                       onSelect={() => handleSearchSelect(transaction.name)}
-                      className="text-slate-100 hover:bg-slate-700/50 hover:text-white"
+                      className="text-slate-100 data-[selected=true]:bg-slate-700 data-[selected=true]:text-white"
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-8 h-8 ${
