@@ -97,49 +97,97 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       id: 1, nis: "2023001", name: "Ahmad Fauzi", email: "ahmad.fauzi@example.com",
       phone: "08123456789", address: "Jl. Merdeka No. 123, Jakarta", birthDate: "2005-05-15",
       class: "X-A", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Lunas"
+      sppStatus: "Lunas", syahriahStatus: "Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
+      }
     },
     {
       id: 2, nis: "2023002", name: "Siti Nurhaliza", email: "siti.nurhaliza@example.com",
       phone: "08234567890", address: "Jl. Sudirman No. 456, Bandung", birthDate: "2006-03-22",
       class: "XI-B", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Belum Lunas", syahriahStatus: "Lunas"
+      sppStatus: "Belum Lunas", syahriahStatus: "Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus"],
+        unpaidMonths: ["September", "Oktober", "November", "Desember"],
+        totalPaid: 8,
+        totalUnpaid: 4
+      }
     },
     {
       id: 3, nis: "2023003", name: "Budi Santoso", email: "budi.santoso@example.com",
       phone: "08345678901", address: "Jl. Gatot Subroto No. 789, Surabaya", birthDate: "2005-11-08",
       class: "X-C", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Belum Lunas"
+      sppStatus: "Lunas", syahriahStatus: "Belum Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
+      }
     },
     {
       id: 4, nis: "2023004", name: "Rina Wijaya", email: "rina.wijaya@example.com",
       phone: "08456789012", address: "Jl. Thamrin No. 321, Medan", birthDate: "2006-07-30",
       class: "XII-A", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Lunas"
+      sppStatus: "Lunas", syahriahStatus: "Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
+      }
     },
     {
       id: 5, nis: "2023005", name: "Andi Pratama", email: "andi.pratama@example.com",
       phone: "08567890123", address: "Jl. Sudirman No. 654, Semarang", birthDate: "2005-09-17",
       class: "XI-C", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Cuti",
-      sppStatus: "Belum Lunas", syahriahStatus: "Belum Lunas"
+      sppStatus: "Belum Lunas", syahriahStatus: "Belum Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April"],
+        unpaidMonths: ["Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        totalPaid: 4,
+        totalUnpaid: 8
+      }
     },
     {
       id: 6, nis: "2023006", name: "Dewi Lestari", email: "dewi.lestari@example.com",
       phone: "08678901234", address: "Jl. Merdeka No. 987, Yogyakarta", birthDate: "2006-01-25",
       class: "X-B", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Lunas"
+      sppStatus: "Lunas", syahriahStatus: "Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
+      }
     },
     {
       id: 7, nis: "2023007", name: "Eko Susilo", email: "eko.susilo@example.com",
       phone: "08789012345", address: "Jl. Gatot Subroto No. 246, Malang", birthDate: "2005-12-10",
       class: "XII-B", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Belum Lunas", syahriahStatus: "Lunas"
+      sppStatus: "Belum Lunas", syahriahStatus: "Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli"],
+        unpaidMonths: ["Agustus", "September", "Oktober", "November", "Desember"],
+        totalPaid: 7,
+        totalUnpaid: 5
+      }
     },
     {
       id: 8, nis: "2023008", name: "Fitri Handayani", email: "fitri.handayani@example.com",
       phone: "08890123456", address: "Jl. Thamrin No. 135, Palembang", birthDate: "2006-04-05",
       class: "X-D", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
-      sppStatus: "Lunas", syahriahStatus: "Belum Lunas"
+      sppStatus: "Lunas", syahriahStatus: "Belum Lunas",
+      sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober"],
+        unpaidMonths: ["November", "Desember"],
+        totalPaid: 10,
+        totalUnpaid: 2
+      }
     }
   ]);
   const [isSantriModalOpen, setIsSantriModalOpen] = useState(false);
@@ -269,14 +317,31 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     if (santriModalMode === "edit") {
       setSantriList(prevSantri =>
         prevSantri.map(item =>
-          item.id === editingSantri.id ? { ...santri, id: editingSantri.id } : item
+          item.id === editingSantri.id ? {
+            ...santri,
+            id: editingSantri.id,
+            // Preserve existing SPP payment details if not provided
+            sppPaymentDetails: santri.sppPaymentDetails || item.sppPaymentDetails || {
+              paidMonths: [],
+              unpaidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+              totalPaid: 0,
+              totalUnpaid: 12
+            }
+          } : item
         )
       );
     } else {
       // Add new santri
       const newSantri = {
         ...santri,
-        id: Math.max(...santriList.map(s => s.id)) + 1
+        id: Math.max(...santriList.map(s => s.id)) + 1,
+        // Initialize SPP payment details for new santri
+        sppPaymentDetails: santri.sppPaymentDetails || {
+          paidMonths: [],
+          unpaidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+          totalPaid: 0,
+          totalUnpaid: 12
+        }
       };
       setSantriList(prevSantri => [...prevSantri, newSantri]);
     }
@@ -297,7 +362,9 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
   };
 
   const handleViewSantriDetails = (santri: any) => {
-    alert(`Viewing details for santri: ${santri.name} (${santri.nis})`);
+    // This function will be handled by the SantriManagement component itself
+    // We're passing it as a prop, but the actual implementation is in SantriManagement
+    // The component will use its own state to show the modal
   };
 
   const handleViewDetails = (transactionId: number) => {

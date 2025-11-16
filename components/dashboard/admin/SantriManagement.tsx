@@ -31,6 +31,18 @@ interface Santri {
   status: string;
   sppStatus: string;
   syahriahStatus: string;
+  sppPaymentDetails?: {
+    paidMonths: string[]; // Array of month names (e.g., ["Januari", "Februari", "Maret"])
+    unpaidMonths: string[]; // Array of month names
+    totalPaid: number;
+    totalUnpaid: number;
+  };
+  syahriahPaymentDetails?: {
+    paidMonths: string[]; // Array of month names (e.g., ["Januari", "Februari", "Maret"])
+    unpaidMonths: string[]; // Array of month names
+    totalPaid: number;
+    totalUnpaid: number;
+  };
 }
 
 interface SantriManagementProps {
@@ -234,7 +246,10 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         </td>
                         <td className="px-4 py-3 text-sm">
                           <button
-                            onClick={() => onViewDetails(santri)}
+                            onClick={() => {
+                              setSelectedSantri(santri);
+                              onViewDetails(santri);
+                            }}
                             className="text-emerald-400 hover:text-emerald-300 mr-3 inline-flex items-center transition-colors"
                           >
                             <Eye className="w-4 h-4 mr-1" />
@@ -279,7 +294,7 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                       />
                     </PaginationItem>
-                      
+                       
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                       <PaginationItem key={page} className="text-white hover:text-black">
                         <PaginationLink
@@ -291,7 +306,7 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         </PaginationLink>
                       </PaginationItem>
                     ))}
-                      
+                       
                     <PaginationItem className="text-white">
                       <PaginationNext
                         onClick={() => handlePageChange(currentPage + 1)}
@@ -309,77 +324,197 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
       {/* Santri Details Modal */}
       {selectedSantri && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-2xl w-full border border-slate-600">
-            <div className="flex items-center justify-between p-4 border-b border-slate-600">
-              <AlertTitle className="text-lg font-semibold text-white">Detail Santri</AlertTitle>
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full h-[85vh] border border-slate-600 flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-slate-600 flex-shrink-0">
+              <AlertTitle className="text-base font-semibold text-white">Detail Santri</AlertTitle>
               <button
                 onClick={() => setSelectedSantri(null)}
                 className="text-slate-400 hover:text-slate-200 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-4">
-              <Alert className="bg-slate-900/50 border-slate-600">
-                <AlertDescription className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">NIS</p>
-                      <p className="text-sm font-semibold text-slate-100">{selectedSantri.nis}</p>
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full w-full p-4">
+                <div className="pb-4">
+                  <Alert className="bg-slate-900/50 border-slate-600">
+                    <AlertDescription className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">NIS</p>
+                        <p className="text-sm font-semibold text-slate-100">{selectedSantri.nis}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Nama</p>
+                        <p className="text-sm font-semibold text-slate-100">{selectedSantri.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Email</p>
+                        <p className="text-sm text-slate-200 truncate">{selectedSantri.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Telepon</p>
+                        <p className="text-sm text-slate-200">{selectedSantri.phone}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Lahir</p>
+                        <p className="text-sm text-slate-200">{selectedSantri.birthDate}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Gender</p>
+                        <p className="text-sm text-slate-200">{selectedSantri.gender}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Kelas</p>
+                        <p className="text-sm text-slate-200">{selectedSantri.class}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Status</p>
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedSantri.status)}`}>
+                          {selectedSantri.status}
+                        </span>
+                      </div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-slate-400">Nama Lengkap</p>
-                      <p className="text-sm font-semibold text-slate-100">{selectedSantri.name}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Email</p>
-                      <p className="text-sm text-slate-200">{selectedSantri.email}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">No. Telepon</p>
-                      <p className="text-sm text-slate-200">{selectedSantri.phone}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Tanggal Lahir</p>
-                      <p className="text-sm text-slate-200">{selectedSantri.birthDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Jenis Kelamin</p>
-                      <p className="text-sm text-slate-200">{selectedSantri.gender}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Kelas</p>
-                      <p className="text-sm text-slate-200">{selectedSantri.class}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Status</p>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(selectedSantri.status)}`}>
-                        {selectedSantri.status}
-                      </span>
-                    </div>
-                    <div className="col-span-2">
-                      <p className="text-sm font-medium text-slate-400">Alamat</p>
+                      <p className="text-xs font-medium text-slate-400">Alamat</p>
                       <p className="text-sm text-slate-200">{selectedSantri.address}</p>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Tanggal Masuk</p>
-                      <p className="text-sm text-slate-200">{selectedSantri.enrollmentDate}</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Masuk</p>
+                        <p className="text-sm text-slate-200">{selectedSantri.enrollmentDate}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">SPP</p>
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPaymentStatusColor(selectedSantri.sppStatus)}`}>
+                          {selectedSantri.sppStatus}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-400">Syahriah</p>
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPaymentStatusColor(selectedSantri.syahriahStatus)}`}>
+                          {selectedSantri.syahriahStatus}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Status SPP</p>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentStatusColor(selectedSantri.sppStatus)}`}>
-                        {selectedSantri.sppStatus}
-                      </span>
+                    
+                    {/* SPP Payment Details Section */}
+                    <div className="mt-3 pt-3 border-t border-slate-600">
+                      <h4 className="text-sm font-semibold text-white mb-2">Pembayaran SPP</h4>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <div className="bg-emerald-500/10 rounded p-2 border border-emerald-500/30">
+                          <p className="text-xs font-medium text-emerald-400">Dibayar</p>
+                          <p className="text-sm font-bold text-emerald-300">{selectedSantri.sppPaymentDetails?.totalPaid || 0}</p>
+                        </div>
+                        <div className="bg-red-500/10 rounded p-2 border border-red-500/30">
+                          <p className="text-xs font-medium text-red-400">Belum</p>
+                          <p className="text-sm font-bold text-red-300">{selectedSantri.sppPaymentDetails?.totalUnpaid || 0}</p>
+                        </div>
+                      </div>
+                       
+                      {selectedSantri.sppPaymentDetails?.paidMonths && selectedSantri.sppPaymentDetails.paidMonths.length > 0 ? (
+                        <div className="mb-2">
+                          <p className="text-xs font-medium text-emerald-400 mb-1">Dibayar:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedSantri.sppPaymentDetails.paidMonths.slice(0, 4).map((month, index) => (
+                              <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                {month}
+                              </span>
+                            ))}
+                            {selectedSantri.sppPaymentDetails.paidMonths.length > 4 && (
+                              <span className="text-xs text-emerald-300">+{selectedSantri.sppPaymentDetails.paidMonths.length - 4}</span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mb-2">
+                          <p className="text-xs font-medium text-emerald-400 mb-1">Dibayar:</p>
+                          <p className="text-xs text-slate-400">Belum ada pembayaran</p>
+                        </div>
+                      )}
+                       
+                      {selectedSantri.sppPaymentDetails?.unpaidMonths && selectedSantri.sppPaymentDetails.unpaidMonths.length > 0 ? (
+                        <div>
+                          <p className="text-xs font-medium text-red-400 mb-1">Belum:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedSantri.sppPaymentDetails.unpaidMonths.slice(0, 4).map((month, index) => (
+                              <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
+                                {month}
+                              </span>
+                            ))}
+                            {selectedSantri.sppPaymentDetails.unpaidMonths.length > 4 && (
+                              <span className="text-xs text-red-300">+{selectedSantri.sppPaymentDetails.unpaidMonths.length - 4}</span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-xs font-medium text-red-400 mb-1">Belum:</p>
+                          <p className="text-xs text-slate-400">Semua bulan telah dibayar</p>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-400">Status Syahriah</p>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentStatusColor(selectedSantri.syahriahStatus)}`}>
-                        {selectedSantri.syahriahStatus}
-                      </span>
+                    
+                    {/* Syahriah Payment Details Section */}
+                    <div className="mt-3 pt-3 border-t border-slate-600">
+                      <h4 className="text-sm font-semibold text-white mb-2">Pembayaran Syahriah</h4>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <div className="bg-emerald-500/10 rounded p-2 border border-emerald-500/30">
+                          <p className="text-xs font-medium text-emerald-400">Dibayar</p>
+                          <p className="text-sm font-bold text-emerald-300">{selectedSantri.syahriahPaymentDetails?.totalPaid || 0}</p>
+                        </div>
+                        <div className="bg-red-500/10 rounded p-2 border border-red-500/30">
+                          <p className="text-xs font-medium text-red-400">Belum</p>
+                          <p className="text-sm font-bold text-red-300">{selectedSantri.syahriahPaymentDetails?.totalUnpaid || 0}</p>
+                        </div>
+                      </div>
+                         
+                      {selectedSantri.syahriahPaymentDetails?.paidMonths && selectedSantri.syahriahPaymentDetails.paidMonths.length > 0 ? (
+                        <div className="mb-2">
+                          <p className="text-xs font-medium text-emerald-400 mb-1">Dibayar:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedSantri.syahriahPaymentDetails.paidMonths.slice(0, 4).map((month, index) => (
+                              <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                {month}
+                              </span>
+                            ))}
+                            {selectedSantri.syahriahPaymentDetails.paidMonths.length > 4 && (
+                              <span className="text-xs text-emerald-300">+{selectedSantri.syahriahPaymentDetails.paidMonths.length - 4}</span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mb-2">
+                          <p className="text-xs font-medium text-emerald-400 mb-1">Dibayar:</p>
+                          <p className="text-xs text-slate-400">Belum ada pembayaran</p>
+                        </div>
+                      )}
+                         
+                      {selectedSantri.syahriahPaymentDetails?.unpaidMonths && selectedSantri.syahriahPaymentDetails.unpaidMonths.length > 0 ? (
+                        <div>
+                          <p className="text-xs font-medium text-red-400 mb-1">Belum:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedSantri.syahriahPaymentDetails.unpaidMonths.slice(0, 4).map((month, index) => (
+                              <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
+                                {month}
+                              </span>
+                            ))}
+                            {selectedSantri.syahriahPaymentDetails.unpaidMonths.length > 4 && (
+                              <span className="text-xs text-red-300">+{selectedSantri.syahriahPaymentDetails.unpaidMonths.length - 4}</span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-xs font-medium text-red-400 mb-1">Belum:</p>
+                          <p className="text-xs text-slate-400">Semua bulan telah dibayar</p>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                </AlertDescription>
-              </Alert>
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              </ScrollArea>
             </div>
           </div>
         </div>
