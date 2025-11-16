@@ -7,6 +7,9 @@ import Header from "./admin/Header";
 import SPPManagement from "./admin/SPPManagement";
 import EditSPPModal from "./admin/EditSPPModal";
 import AddClassDialog from "./admin/AddClassDialog";
+import SyahriahManagement from "./admin/SyahriahManagement";
+import EditSyahriahModal from "./admin/EditSyahriahModal";
+import AddSyahriahDialog from "./admin/AddSyahriahDialog";
 
 interface MenuItem {
   key: string;
@@ -70,6 +73,18 @@ export default function Admin() {
     { name: "Class XI", monthly: "Rp 160.000", semester: "Rp 800.000" },
     { name: "Class XII", monthly: "Rp 170.000", semester: "Rp 850.000" }
   ]);
+  
+  // Syahriah state
+  const [isEditSyahriahModalOpen, setIsEditSyahriahModalOpen] = useState(false);
+  const [isAddSyahriahDialogOpen, setIsAddSyahriahDialogOpen] = useState(false);
+  const [editingSyahriahClass, setEditingSyahriahClass] = useState("");
+  const [monthlySyahriah, setMonthlySyahriah] = useState("");
+  const [yearlySyahriah, setYearlySyahriah] = useState("");
+  const [syahriahClasses, setSyahriahClasses] = useState([
+    { name: "Class X", monthly: "Rp 100.000", yearly: "Rp 1.200.000" },
+    { name: "Class XI", monthly: "Rp 110.000", yearly: "Rp 1.320.000" },
+    { name: "Class XII", monthly: "Rp 120.000", yearly: "Rp 1.440.000" }
+  ]);
 
   const handleMenuClick = (menuKey: string, hasSubmenu = false) => {
     setActiveMenu(menuKey);
@@ -131,6 +146,52 @@ export default function Admin() {
     setIsAddClassDialogOpen(true);
   };
 
+  // Syahriah handlers
+  const openEditSyahriahModal = (className: string, monthly: string, yearly: string) => {
+    setEditingSyahriahClass(className);
+    setMonthlySyahriah(monthly);
+    setYearlySyahriah(yearly);
+    setIsEditSyahriahModalOpen(true);
+  };
+
+  const handleSaveSyahriah = () => {
+    setSyahriahClasses(prevClasses =>
+      prevClasses.map(classItem =>
+        classItem.name === editingSyahriahClass
+          ? {
+              ...classItem,
+              monthly: `Rp ${parseInt(monthlySyahriah).toLocaleString('id-ID')}`,
+              yearly: `Rp ${parseInt(yearlySyahriah).toLocaleString('id-ID')}`
+            }
+          : classItem
+      )
+    );
+    setIsEditSyahriahModalOpen(false);
+  };
+
+  const handleDeleteSyahriahClass = (className: string) => {
+    if (window.confirm(`Are you sure you want to delete ${className}?`)) {
+      setSyahriahClasses(prevClasses =>
+        prevClasses.filter(classItem => classItem.name !== className)
+      );
+    }
+  };
+
+  const handleAddNewSyahriahClass = (className: string, monthlySyahriah: string, yearlySyahriah: string) => {
+    setSyahriahClasses(prevClasses => [
+      ...prevClasses,
+      {
+        name: className,
+        monthly: `Rp ${parseInt(monthlySyahriah).toLocaleString('id-ID')}`,
+        yearly: `Rp ${parseInt(yearlySyahriah).toLocaleString('id-ID')}`
+      }
+    ]);
+  };
+
+  const openAddSyahriahDialog = () => {
+    setIsAddSyahriahDialogOpen(true);
+  };
+
   const handleViewDetails = (transactionId: number) => {
     alert(`Viewing details for transaction ID: ${transactionId}`);
   };
@@ -155,7 +216,7 @@ export default function Admin() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden ml-0 lg:ml-64">
+      <div className="flex-1 flex flex-col overflow-hidden ml-0 lg:ml-60">
         {/* Header */}
         <Header
           activeMenu={activeMenu}
@@ -170,6 +231,15 @@ export default function Admin() {
               sppClasses={sppClasses}
               onDeleteClass={handleDeleteClass}
               onAddNewClass={openAddClassDialog}
+              onViewDetails={handleViewDetails}
+            />
+          )}
+          {activeMenu === 'syahriah' && (
+            <SyahriahManagement
+              onEditModalOpen={openEditSyahriahModal}
+              syahriahClasses={syahriahClasses}
+              onDeleteClass={handleDeleteSyahriahClass}
+              onAddNewClass={openAddSyahriahDialog}
               onViewDetails={handleViewDetails}
             />
           )}
@@ -193,6 +263,25 @@ export default function Admin() {
         isOpen={isAddClassDialogOpen}
         onClose={() => setIsAddClassDialogOpen(false)}
         onAddClass={handleAddNewClass}
+      />
+
+      {/* Edit Syahriah Modal */}
+      <EditSyahriahModal
+        isOpen={isEditSyahriahModalOpen}
+        onClose={() => setIsEditSyahriahModalOpen(false)}
+        onSave={handleSaveSyahriah}
+        editingClass={editingSyahriahClass}
+        monthlySyahriah={monthlySyahriah}
+        yearlySyahriah={yearlySyahriah}
+        onMonthlySyahriahChange={setMonthlySyahriah}
+        onYearlySyahriahChange={setYearlySyahriah}
+      />
+
+      {/* Add Syahriah Dialog */}
+      <AddSyahriahDialog
+        isOpen={isAddSyahriahDialogOpen}
+        onClose={() => setIsAddSyahriahDialogOpen(false)}
+        onAddClass={handleAddNewSyahriahClass}
       />
     </div>
   );

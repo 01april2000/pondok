@@ -24,9 +24,9 @@ export default function Header({ activeMenu, onMenuToggle }: HeaderProps) {
   const getPageDescription = () => {
     switch (activeMenu) {
       case 'spp':
-        return 'Manage SPP Dan Melihat Transaksi SPP';
+        return 'Manage SPP Dan Detail Transaksi SPP';
       case 'syahriah':
-        return 'Manage Syahriah fees and payments';
+        return 'Manage Pembayaran Syahriah Dan Detail Transaksi Syahriah';
       case 'uang-saku':
         return 'Manage pocket money allowances';
       case 'laundry':

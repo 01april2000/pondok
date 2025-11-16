@@ -2,6 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import {
+  Users,
+  GraduationCap,
+  Banknote,
+  DollarSign,
+  CreditCard,
+  Home,
+  ChevronDown,
+  ChevronRight,
+  BarChart3
+} from 'lucide-react';
 
 interface MenuItem {
   key: string;
@@ -26,24 +37,30 @@ interface SidebarProps {
 
 const menuItems: MenuItem[] = [
   {
+    key: "dashboard",
+    label: "Dashboard",
+    icon: "home",
+    href: "/dashboard"
+  },
+  {
     key: "user-management",
-    label: "User Management",
-    icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
+    label: "Manajemen Pengguna",
+    icon: "users",
     href: "/dashboard/user-management"
   },
   {
     key: "halaman-santri",
-    label: "Halaman Santri",
-    icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
+    label: "Data Santri",
+    icon: "graduation-cap",
     href: "/dashboard/halaman-santri"
   },
   {
     key: "transaksi",
-    label: "Transaksi",
-    icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1",
+    label: "Transaksi Pembayaran",
+    icon: "banknote",
     hasSubmenu: true,
     submenu: [
-      { key: "spp", label: "SPP", href: "/dashboard/transaksi/spp" },
+      { key: "spp", label: "SPP Bulanan", href: "/dashboard/transaksi/spp" },
       { key: "syahriah", label: "Syahriah", href: "/dashboard/transaksi/syahriah" },
       { key: "uang-saku", label: "Uang Saku", href: "/dashboard/transaksi/uang-saku" },
       { key: "laundry", label: "Laundry", href: "/dashboard/transaksi/laundry" }
@@ -51,51 +68,81 @@ const menuItems: MenuItem[] = [
   },
   {
     key: "menu-bendahara",
-    label: "Menu Bendahara",
-    icon: "M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z",
+    label: "Keuangan",
+    icon: "bar-chart-3",
     href: "/dashboard/menu-bendahara"
   }
 ];
 
 export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubmenuClick, sidebarOpen = false }: SidebarProps) {
+  const getIcon = (iconName: string) => {
+    const iconClass = "w-5 h-5";
+    switch (iconName) {
+      case "home":
+        return <Home className={iconClass} />;
+      case "users":
+        return <Users className={iconClass} />;
+      case "graduation-cap":
+        return <GraduationCap className={iconClass} />;
+      case "banknote":
+        return <Banknote className={iconClass} />;
+      case "bar-chart-3":
+        return <BarChart3 className={iconClass} />;
+      default:
+        return <Home className={iconClass} />;
+    }
+  };
+
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
+    <div className={`fixed inset-y-0 left-0 z-50 w-60 bg-gradient-to-b from-slate-900 to-slate-800 shadow-2xl transform transition-all duration-500 ease-in-out ${
       sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-    }`}>
-      <div className="flex h-16 items-center justify-center bg-blue-600">
-        <h1 className="text-xl font-bold text-white">Dashboard Admin</h1>
+    } border-r border-slate-700 flex flex-col`}>
+      {/* Header */}
+      <div className="flex h-16 items-center justify-center bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg flex-shrink-0">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-md">
+            <DollarSign className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-white">Sistem Pembayaran</h1>
+            <p className="text-xs text-emerald-100">Pondok Pesantren</p>
+          </div>
+        </div>
       </div>
       
-      <nav className="mt-8">
-        <div className="px-4 space-y-2">
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
+        <div className="space-y-1">
           {menuItems.map((item) => (
             <div key={item.key} className="group">
               {item.hasSubmenu ? (
                 <>
                   <div
-                    className={`flex items-center px-4 py-3 text-gray-700 rounded-lg cursor-pointer ${
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all duration-300 ${
                       activeMenu === item.key
-                        ? item.key === 'halaman-santri'
-                          ? 'bg-blue-50 border-r-2 border-blue-500'
-                          : 'bg-blue-50 border-r-2 border-blue-500'
-                        : 'hover:bg-blue-50'
+                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                        : 'text-slate-300 hover:bg-slate-700 hover:text-white'
                     }`}
                     onClick={() => onMenuClick(item.key, true)}
                   >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                    </svg>
-                    <span>{item.label}</span>
-                    <svg className="w-4 h-4 ml-auto transform transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <div className="flex items-center">
+                      <div className={`p-1.5 rounded mr-2 ${
+                        activeMenu === item.key ? 'bg-white/20' : 'bg-slate-700'
+                      }`}>
+                        {getIcon(item.icon)}
+                      </div>
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </div>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                      expandedMenu === item.key ? 'transform rotate-180' : ''
+                    }`} />
                   </div>
                   
                   {/* Sub-menu */}
-                  <div className={`ml-8 mt-2 space-y-1 transition-all duration-300 ${
+                  <div className={`ml-3 mt-1 space-y-0.5 transition-all duration-300 overflow-hidden ${
                     expandedMenu === item.key
-                      ? 'opacity-100 max-h-96'
-                      : 'opacity-0 max-h-0 overflow-hidden'
+                      ? 'max-h-64 opacity-100'
+                      : 'max-h-0 opacity-0'
                   }`}>
                     {item.submenu?.map((subItem) => (
                       <Link
@@ -105,40 +152,55 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
                           e.preventDefault();
                           onSubmenuClick(subItem.key);
                         }}
-                        className={`flex items-center px-4 py-2 text-sm rounded-lg cursor-pointer ${
+                        className={`flex items-center px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
                           activeMenu === subItem.key
-                            ? 'bg-red-100 text-red-700'
-                            : 'text-gray-600 hover:bg-red-100'
+                            ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border-l-2 border-emerald-400'
+                            : 'text-slate-400 hover:bg-slate-700/50 hover:text-slate-200'
                         }`}
                       >
-                        <span className="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
-                        {subItem.label}
+                        <div className="w-1.5 h-1.5 bg-current rounded-full mr-2"></div>
+                        <span className="text-xs font-medium">{subItem.label}</span>
                       </Link>
                     ))}
                   </div>
                 </>
               ) : (
                 <Link
-                  href="#"
-                  className={`flex items-center px-4 py-3 text-gray-700 rounded-lg cursor-pointer ${
+                  href={item.href || '#'}
+                  className={`flex items-center px-3 py-2 rounded-lg cursor-pointer transition-all duration-300 ${
                     activeMenu === item.key
-                      ? item.key === 'halaman-santri'
-                        ? 'bg-blue-50 border-r-2 border-blue-500'
-                        : 'bg-blue-50 border-r-2 border-blue-500'
-                      : 'hover:bg-blue-50'
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                      : 'text-slate-300 hover:bg-slate-700 hover:text-white'
                   }`}
                   onClick={() => onMenuClick(item.key)}
                 >
-                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                  </svg>
-                  <span>{item.label}</span>
+                  <div className={`p-1.5 rounded mr-2 ${
+                    activeMenu === item.key ? 'bg-white/20' : 'bg-slate-700'
+                  }`}>
+                    {getIcon(item.icon)}
+                  </div>
+                  <span className="text-sm font-medium">{item.label}</span>
                 </Link>
               )}
             </div>
           ))}
         </div>
       </nav>
+      
+      {/* Footer */}
+      <div className="p-3 border-t border-slate-700 flex-shrink-0">
+        <div className="bg-gradient-to-r from-slate-800 to-slate-700 rounded-lg p-3 border border-slate-600">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
+              <CreditCard className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <p className="text-xs font-medium text-white">Payment System</p>
+              <p className="text-xs text-slate-400">v2.0.1</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
