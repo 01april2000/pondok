@@ -9,6 +9,8 @@ import ClassFormModal from "./admin/ClassFormModal";
 import SyahriahManagement from "./admin/SyahriahManagement";
 import SyahriahFormModal from "./admin/SyahriahFormModal";
 import SearchComponent from "./admin/SearchComponent";
+import SantriManagement from "./admin/SantriManagement";
+import SantriFormModal from "./admin/SantriFormModal";
 
 interface MenuItem {
   key: string;
@@ -58,8 +60,12 @@ const menuItems: MenuItem[] = [
   }
 ];
 
-export default function Admin() {
-  const [activeMenu, setActiveMenu] = useState("spp");
+interface AdminProps {
+  initialActiveMenu?: string;
+}
+
+export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
+  const [activeMenu, setActiveMenu] = useState(initialActiveMenu);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
   const [classModalMode, setClassModalMode] = useState<"add" | "edit">("add");
@@ -84,6 +90,61 @@ export default function Admin() {
     { name: "Class XI", monthly: "Rp 110.000", yearly: "Rp 1.320.000" },
     { name: "Class XII", monthly: "Rp 120.000", yearly: "Rp 1.440.000" }
   ]);
+
+  // Santri state
+  const [santriList, setSantriList] = useState([
+    {
+      id: 1, nis: "2023001", name: "Ahmad Fauzi", email: "ahmad.fauzi@example.com",
+      phone: "08123456789", address: "Jl. Merdeka No. 123, Jakarta", birthDate: "2005-05-15",
+      class: "X-A", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Lunas", syahriahStatus: "Lunas"
+    },
+    {
+      id: 2, nis: "2023002", name: "Siti Nurhaliza", email: "siti.nurhaliza@example.com",
+      phone: "08234567890", address: "Jl. Sudirman No. 456, Bandung", birthDate: "2006-03-22",
+      class: "XI-B", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Belum Lunas", syahriahStatus: "Lunas"
+    },
+    {
+      id: 3, nis: "2023003", name: "Budi Santoso", email: "budi.santoso@example.com",
+      phone: "08345678901", address: "Jl. Gatot Subroto No. 789, Surabaya", birthDate: "2005-11-08",
+      class: "X-C", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Lunas", syahriahStatus: "Belum Lunas"
+    },
+    {
+      id: 4, nis: "2023004", name: "Rina Wijaya", email: "rina.wijaya@example.com",
+      phone: "08456789012", address: "Jl. Thamrin No. 321, Medan", birthDate: "2006-07-30",
+      class: "XII-A", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Lunas", syahriahStatus: "Lunas"
+    },
+    {
+      id: 5, nis: "2023005", name: "Andi Pratama", email: "andi.pratama@example.com",
+      phone: "08567890123", address: "Jl. Sudirman No. 654, Semarang", birthDate: "2005-09-17",
+      class: "XI-C", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Cuti",
+      sppStatus: "Belum Lunas", syahriahStatus: "Belum Lunas"
+    },
+    {
+      id: 6, nis: "2023006", name: "Dewi Lestari", email: "dewi.lestari@example.com",
+      phone: "08678901234", address: "Jl. Merdeka No. 987, Yogyakarta", birthDate: "2006-01-25",
+      class: "X-B", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Lunas", syahriahStatus: "Lunas"
+    },
+    {
+      id: 7, nis: "2023007", name: "Eko Susilo", email: "eko.susilo@example.com",
+      phone: "08789012345", address: "Jl. Gatot Subroto No. 246, Malang", birthDate: "2005-12-10",
+      class: "XII-B", gender: "Laki-laki", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Belum Lunas", syahriahStatus: "Lunas"
+    },
+    {
+      id: 8, nis: "2023008", name: "Fitri Handayani", email: "fitri.handayani@example.com",
+      phone: "08890123456", address: "Jl. Thamrin No. 135, Palembang", birthDate: "2006-04-05",
+      class: "X-D", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
+      sppStatus: "Lunas", syahriahStatus: "Belum Lunas"
+    }
+  ]);
+  const [isSantriModalOpen, setIsSantriModalOpen] = useState(false);
+  const [santriModalMode, setSantriModalMode] = useState<"add" | "edit">("add");
+  const [editingSantri, setEditingSantri] = useState<any>(null);
 
   const handleMenuClick = (menuKey: string, hasSubmenu = false) => {
     setActiveMenu(menuKey);
@@ -197,6 +258,48 @@ export default function Admin() {
     setIsSyahriahModalOpen(true);
   };
 
+  // Santri handlers
+  const openEditSantriModal = (santri: any) => {
+    setEditingSantri(santri);
+    setSantriModalMode("edit");
+    setIsSantriModalOpen(true);
+  };
+
+  const handleSaveSantri = (santri: any) => {
+    if (santriModalMode === "edit") {
+      setSantriList(prevSantri =>
+        prevSantri.map(item =>
+          item.id === editingSantri.id ? { ...santri, id: editingSantri.id } : item
+        )
+      );
+    } else {
+      // Add new santri
+      const newSantri = {
+        ...santri,
+        id: Math.max(...santriList.map(s => s.id)) + 1
+      };
+      setSantriList(prevSantri => [...prevSantri, newSantri]);
+    }
+    setIsSantriModalOpen(false);
+  };
+
+  const handleDeleteSantri = (nis: string) => {
+    if (window.confirm(`Are you sure you want to delete santri with NIS: ${nis}?`)) {
+      setSantriList(prevSantri =>
+        prevSantri.filter(item => item.nis !== nis)
+      );
+    }
+  };
+
+  const openAddSantriDialog = () => {
+    setSantriModalMode("add");
+    setIsSantriModalOpen(true);
+  };
+
+  const handleViewSantriDetails = (santri: any) => {
+    alert(`Viewing details for santri: ${santri.name} (${santri.nis})`);
+  };
+
   const handleViewDetails = (transactionId: number) => {
     alert(`Viewing details for transaction ID: ${transactionId}`);
   };
@@ -248,6 +351,15 @@ export default function Admin() {
               onViewDetails={handleViewDetails}
             />
           )}
+          {activeMenu === 'halaman-santri' && (
+            <SantriManagement
+              onEditModalOpen={openEditSantriModal}
+              onAddNewSantri={openAddSantriDialog}
+              onViewDetails={handleViewSantriDetails}
+              onDeleteSantri={handleDeleteSantri}
+              santriList={santriList}
+            />
+          )}
         </main>
       </div>
 
@@ -275,6 +387,15 @@ export default function Admin() {
           yearlySyahriah: yearlySyahriah
         } : undefined}
         onSubmit={handleSaveSyahriah}
+      />
+
+      {/* Santri Form Modal (Add/Edit) */}
+      <SantriFormModal
+        isOpen={isSantriModalOpen}
+        onClose={() => setIsSantriModalOpen(false)}
+        mode={santriModalMode}
+        initialData={santriModalMode === "edit" ? editingSantri : undefined}
+        onSubmit={handleSaveSantri}
       />
     </div>
   );

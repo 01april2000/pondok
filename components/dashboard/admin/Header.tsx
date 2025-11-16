@@ -16,6 +16,8 @@ export default function Header({ activeMenu, onMenuToggle }: HeaderProps) {
         return 'Uang Saku Management';
       case 'laundry':
         return 'Laundry Management';
+      case 'halaman-santri':
+        return 'Data Santri';
       default:
         return 'Dashboard';
     }
@@ -31,6 +33,8 @@ export default function Header({ activeMenu, onMenuToggle }: HeaderProps) {
         return 'Manage pocket money allowances';
       case 'laundry':
         return 'Manage laundry services and fees';
+      case 'halaman-santri':
+        return 'Manage data santri dan informasi pembayaran';
       default:
         return 'Admin dashboard for managing school operations';
     }

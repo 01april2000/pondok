@@ -150,10 +150,6 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
                       <Link
                         key={subItem.key}
                         href={subItem.href || '#'}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onSubmenuClick(subItem.key);
-                        }}
                         className={`flex items-center px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
                           activeMenu === subItem.key
                             ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border-l-2 border-emerald-400'
@@ -174,7 +170,6 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
                       ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
                       : 'text-slate-300 hover:bg-slate-700 hover:text-white'
                   }`}
-                  onClick={() => onMenuClick(item.key)}
                 >
                   <div className={`p-1.5 rounded mr-2 ${
                     activeMenu === item.key ? 'bg-white/20' : 'bg-slate-700'
