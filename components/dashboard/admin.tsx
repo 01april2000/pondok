@@ -6,14 +6,7 @@ import Sidebar from "./admin/Sidebar";
 import Header from "./admin/Header";
 import SPPManagement from "./admin/SPPManagement";
 import EditSPPModal from "./admin/EditSPPModal";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import AddClassDialog from "./admin/AddClassDialog";
 
 interface MenuItem {
   key: string;
@@ -67,6 +60,7 @@ export default function Admin() {
   const [activeMenu, setActiveMenu] = useState("spp");
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddClassDialogOpen, setIsAddClassDialogOpen] = useState(false);
   const [editingClass, setEditingClass] = useState("");
   const [monthlySpp, setMonthlySpp] = useState("");
   const [semesterSpp, setSemesterSpp] = useState("");
@@ -122,23 +116,19 @@ export default function Admin() {
     }
   };
 
-  const handleAddNewClass = () => {
-    const newClassName = prompt("Enter new class name:");
-    if (newClassName) {
-      const newMonthly = prompt("Enter monthly SPP amount:");
-      const newSemester = prompt("Enter semester SPP amount:");
-      
-      if (newMonthly && newSemester) {
-        setSppClasses(prevClasses => [
-          ...prevClasses,
-          {
-            name: newClassName,
-            monthly: `Rp ${parseInt(newMonthly).toLocaleString('id-ID')}`,
-            semester: `Rp ${parseInt(newSemester).toLocaleString('id-ID')}`
-          }
-        ]);
+  const handleAddNewClass = (className: string, monthlySpp: string, semesterSpp: string) => {
+    setSppClasses(prevClasses => [
+      ...prevClasses,
+      {
+        name: className,
+        monthly: `Rp ${parseInt(monthlySpp).toLocaleString('id-ID')}`,
+        semester: `Rp ${parseInt(semesterSpp).toLocaleString('id-ID')}`
       }
-    }
+    ]);
+  };
+
+  const openAddClassDialog = () => {
+    setIsAddClassDialogOpen(true);
   };
 
   const handleViewDetails = (transactionId: number) => {
@@ -179,7 +169,7 @@ export default function Admin() {
               onEditModalOpen={openEditModal}
               sppClasses={sppClasses}
               onDeleteClass={handleDeleteClass}
-              onAddNewClass={handleAddNewClass}
+              onAddNewClass={openAddClassDialog}
               onViewDetails={handleViewDetails}
             />
           )}
@@ -196,6 +186,13 @@ export default function Admin() {
         semesterSpp={semesterSpp}
         onMonthlySppChange={setMonthlySpp}
         onSemesterSppChange={setSemesterSpp}
+      />
+
+      {/* Add Class Dialog */}
+      <AddClassDialog
+        isOpen={isAddClassDialogOpen}
+        onClose={() => setIsAddClassDialogOpen(false)}
+        onAddClass={handleAddNewClass}
       />
     </div>
   );
