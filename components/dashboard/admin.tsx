@@ -6,6 +6,14 @@ import Sidebar from "./admin/Sidebar";
 import Header from "./admin/Header";
 import SPPManagement from "./admin/SPPManagement";
 import EditSPPModal from "./admin/EditSPPModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 interface MenuItem {
   key: string;
@@ -63,6 +71,11 @@ export default function Admin() {
   const [monthlySpp, setMonthlySpp] = useState("");
   const [semesterSpp, setSemesterSpp] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sppClasses, setSppClasses] = useState([
+    { name: "Class X", monthly: "Rp 150.000", semester: "Rp 750.000" },
+    { name: "Class XI", monthly: "Rp 160.000", semester: "Rp 800.000" },
+    { name: "Class XII", monthly: "Rp 170.000", semester: "Rp 850.000" }
+  ]);
 
   const handleMenuClick = (menuKey: string, hasSubmenu = false) => {
     setActiveMenu(menuKey);
@@ -87,8 +100,49 @@ export default function Admin() {
   };
 
   const handleSaveSPP = () => {
-    console.log('Saving SPP:', { editingClass, monthlySpp, semesterSpp });
+    setSppClasses(prevClasses =>
+      prevClasses.map(classItem =>
+        classItem.name === editingClass
+          ? {
+              ...classItem,
+              monthly: `Rp ${parseInt(monthlySpp).toLocaleString('id-ID')}`,
+              semester: `Rp ${parseInt(semesterSpp).toLocaleString('id-ID')}`
+            }
+          : classItem
+      )
+    );
     setIsEditModalOpen(false);
+  };
+
+  const handleDeleteClass = (className: string) => {
+    if (window.confirm(`Are you sure you want to delete ${className}?`)) {
+      setSppClasses(prevClasses =>
+        prevClasses.filter(classItem => classItem.name !== className)
+      );
+    }
+  };
+
+  const handleAddNewClass = () => {
+    const newClassName = prompt("Enter new class name:");
+    if (newClassName) {
+      const newMonthly = prompt("Enter monthly SPP amount:");
+      const newSemester = prompt("Enter semester SPP amount:");
+      
+      if (newMonthly && newSemester) {
+        setSppClasses(prevClasses => [
+          ...prevClasses,
+          {
+            name: newClassName,
+            monthly: `Rp ${parseInt(newMonthly).toLocaleString('id-ID')}`,
+            semester: `Rp ${parseInt(newSemester).toLocaleString('id-ID')}`
+          }
+        ]);
+      }
+    }
+  };
+
+  const handleViewDetails = (transactionId: number) => {
+    alert(`Viewing details for transaction ID: ${transactionId}`);
   };
 
   return (
@@ -121,7 +175,13 @@ export default function Admin() {
         {/* Dashboard Content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
           {activeMenu === 'spp' && (
-            <SPPManagement onEditModalOpen={openEditModal} />
+            <SPPManagement
+              onEditModalOpen={openEditModal}
+              sppClasses={sppClasses}
+              onDeleteClass={handleDeleteClass}
+              onAddNewClass={handleAddNewClass}
+              onViewDetails={handleViewDetails}
+            />
           )}
         </main>
       </div>

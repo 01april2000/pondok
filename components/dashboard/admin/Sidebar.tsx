@@ -76,7 +76,7 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
                     className={`flex items-center px-4 py-3 text-gray-700 rounded-lg cursor-pointer ${
                       activeMenu === item.key
                         ? item.key === 'halaman-santri'
-                          ? 'bg-orange-50 border-r-2 border-orange-500'
+                          ? 'bg-blue-50 border-r-2 border-blue-500'
                           : 'bg-blue-50 border-r-2 border-blue-500'
                         : 'hover:bg-blue-50'
                     }`}
@@ -123,7 +123,7 @@ export default function Sidebar({ activeMenu, expandedMenu, onMenuClick, onSubme
                   className={`flex items-center px-4 py-3 text-gray-700 rounded-lg cursor-pointer ${
                     activeMenu === item.key
                       ? item.key === 'halaman-santri'
-                        ? 'bg-orange-50 border-r-2 border-orange-500'
+                        ? 'bg-blue-50 border-r-2 border-blue-500'
                         : 'bg-blue-50 border-r-2 border-blue-500'
                       : 'hover:bg-blue-50'
                   }`}

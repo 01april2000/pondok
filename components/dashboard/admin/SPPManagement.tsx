@@ -1,15 +1,22 @@
 "use client";
 
-interface SPPManagementProps {
-  onEditModalOpen: (className: string, monthly: string, semester: string) => void;
+import { Edit, Trash2, Eye, DollarSign } from "lucide-react";
+
+interface SPPClass {
+  name: string;
+  monthly: string;
+  semester: string;
 }
 
-export default function SPPManagement({ onEditModalOpen }: SPPManagementProps) {
-  const sppClasses = [
-    { name: "Class X", monthly: "Rp 150.000", semester: "Rp 750.000" },
-    { name: "Class XI", monthly: "Rp 160.000", semester: "Rp 800.000" },
-    { name: "Class XII", monthly: "Rp 170.000", semester: "Rp 850.000" }
-  ];
+interface SPPManagementProps {
+  onEditModalOpen: (className: string, monthly: string, semester: string) => void;
+  sppClasses: SPPClass[];
+  onDeleteClass: (className: string) => void;
+  onAddNewClass: () => void;
+  onViewDetails: (transactionId: number) => void;
+}
+
+export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteClass, onAddNewClass, onViewDetails }: SPPManagementProps) {
 
   const transactions = [
     {
@@ -47,7 +54,10 @@ export default function SPPManagement({ onEditModalOpen }: SPPManagementProps) {
       <div className="bg-white rounded-lg shadow mb-6">
         <div className="px-6 py-4 border-b flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-800">SPP Pricing Management</h3>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          <button
+            onClick={onAddNewClass}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
             + Add New Class
           </button>
         </div>
@@ -75,11 +85,18 @@ export default function SPPManagement({ onEditModalOpen }: SPPManagementProps) {
                           classItem.monthly.replace(/[Rp .]/g, ''),
                           classItem.semester.replace(/[Rp .]/g, '')
                         )}
-                        className="text-blue-600 hover:text-blue-800 mr-3"
+                        className="text-blue-600 hover:text-blue-800 mr-3 inline-flex items-center"
                       >
+                        <Edit className="w-4 h-4 mr-1" />
                         Edit
                       </button>
-                      <button className="text-red-600 hover:text-red-800">Delete</button>
+                      <button
+                        onClick={() => onDeleteClass(classItem.name)}
+                        className="text-red-600 hover:text-red-800 inline-flex items-center"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -104,9 +121,7 @@ export default function SPPManagement({ onEditModalOpen }: SPPManagementProps) {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className={`w-10 h-10 bg-${transaction.statusColor}-100 rounded-full flex items-center justify-center`}>
-                      <svg className={`w-5 h-5 text-${transaction.statusColor}-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                      </svg>
+                      <DollarSign className={`w-5 h-5 text-${transaction.statusColor}-600`} />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">{transaction.name}</h4>
@@ -122,8 +137,12 @@ export default function SPPManagement({ onEditModalOpen }: SPPManagementProps) {
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${transaction.statusColor}-100 text-${transaction.statusColor}-800`}>
                     {transaction.status}
                   </span>
-                  <button className="text-blue-600 hover:text-blue-800 text-sm">
-                    View Details →
+                  <button
+                    onClick={() => onViewDetails(transaction.id)}
+                    className="text-blue-600 hover:text-blue-800 text-sm inline-flex items-center"
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    View Details
                   </button>
                 </div>
               </div>
