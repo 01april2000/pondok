@@ -416,13 +416,13 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         <div className="mb-2">
                           <p className="text-xs font-medium text-emerald-400 mb-1">Dibayar:</p>
                           <div className="flex flex-wrap gap-1">
-                            {selectedSantri.sppPaymentDetails.paidMonths.slice(0, 4).map((month, index) => (
+                            {selectedSantri.sppPaymentDetails.paidMonths.slice(0, 12).map((month, index) => (
                               <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                                 {month}
                               </span>
                             ))}
-                            {selectedSantri.sppPaymentDetails.paidMonths.length > 4 && (
-                              <span className="text-xs text-emerald-300">+{selectedSantri.sppPaymentDetails.paidMonths.length - 4}</span>
+                            {selectedSantri.sppPaymentDetails.paidMonths.length > 12 && (
+                              <span className="text-xs text-emerald-300">+{selectedSantri.sppPaymentDetails.paidMonths.length - 12}</span>
                             )}
                           </div>
                         </div>
@@ -437,13 +437,13 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         <div>
                           <p className="text-xs font-medium text-red-400 mb-1">Belum:</p>
                           <div className="flex flex-wrap gap-1">
-                            {selectedSantri.sppPaymentDetails.unpaidMonths.slice(0, 4).map((month, index) => (
+                            {selectedSantri.sppPaymentDetails.unpaidMonths.slice(0, 12).map((month, index) => (
                               <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
                                 {month}
                               </span>
                             ))}
-                            {selectedSantri.sppPaymentDetails.unpaidMonths.length > 4 && (
-                              <span className="text-xs text-red-300">+{selectedSantri.sppPaymentDetails.unpaidMonths.length - 4}</span>
+                            {selectedSantri.sppPaymentDetails.unpaidMonths.length > 12 && (
+                              <span className="text-xs text-red-300">+{selectedSantri.sppPaymentDetails.unpaidMonths.length - 12}</span>
                             )}
                           </div>
                         </div>
@@ -473,13 +473,13 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         <div className="mb-2">
                           <p className="text-xs font-medium text-emerald-400 mb-1">Dibayar:</p>
                           <div className="flex flex-wrap gap-1">
-                            {selectedSantri.syahriahPaymentDetails.paidMonths.slice(0, 4).map((month, index) => (
+                            {selectedSantri.syahriahPaymentDetails.paidMonths.slice(0, 12).map((month, index) => (
                               <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                                 {month}
                               </span>
                             ))}
-                            {selectedSantri.syahriahPaymentDetails.paidMonths.length > 4 && (
-                              <span className="text-xs text-emerald-300">+{selectedSantri.syahriahPaymentDetails.paidMonths.length - 4}</span>
+                            {selectedSantri.syahriahPaymentDetails.paidMonths.length > 12 && (
+                              <span className="text-xs text-emerald-300">+{selectedSantri.syahriahPaymentDetails.paidMonths.length - 12}</span>
                             )}
                           </div>
                         </div>
@@ -494,13 +494,13 @@ export default function SantriManagement({ onEditModalOpen, onAddNewSantri, onVi
                         <div>
                           <p className="text-xs font-medium text-red-400 mb-1">Belum:</p>
                           <div className="flex flex-wrap gap-1">
-                            {selectedSantri.syahriahPaymentDetails.unpaidMonths.slice(0, 4).map((month, index) => (
+                            {selectedSantri.syahriahPaymentDetails.unpaidMonths.slice(0, 12).map((month, index) => (
                               <span key={index} className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
                                 {month}
                               </span>
                             ))}
-                            {selectedSantri.syahriahPaymentDetails.unpaidMonths.length > 4 && (
-                              <span className="text-xs text-red-300">+{selectedSantri.syahriahPaymentDetails.unpaidMonths.length - 4}</span>
+                            {selectedSantri.syahriahPaymentDetails.unpaidMonths.length > 12 && (
+                              <span className="text-xs text-red-300">+{selectedSantri.syahriahPaymentDetails.unpaidMonths.length - 12}</span>
                             )}
                           </div>
                         </div>

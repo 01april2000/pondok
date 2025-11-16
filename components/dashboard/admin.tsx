@@ -103,6 +103,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: [],
         totalPaid: 12,
         totalUnpaid: 0
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
       }
     },
     {
@@ -115,6 +121,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: ["September", "Oktober", "November", "Desember"],
         totalPaid: 8,
         totalUnpaid: 4
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
       }
     },
     {
@@ -127,6 +139,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: [],
         totalPaid: 12,
         totalUnpaid: 0
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei"],
+        unpaidMonths: ["Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        totalPaid: 5,
+        totalUnpaid: 7
       }
     },
     {
@@ -135,6 +153,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
       class: "XII-A", gender: "Perempuan", enrollmentDate: "2023-07-01", status: "Aktif",
       sppStatus: "Lunas", syahriahStatus: "Lunas",
       sppPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        unpaidMonths: [],
+        totalPaid: 12,
+        totalUnpaid: 0
+      },
+      syahriahPaymentDetails: {
         paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         unpaidMonths: [],
         totalPaid: 12,
@@ -151,6 +175,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: ["Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         totalPaid: 4,
         totalUnpaid: 8
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret"],
+        unpaidMonths: ["April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        totalPaid: 3,
+        totalUnpaid: 9
       }
     },
     {
@@ -163,6 +193,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: [],
         totalPaid: 12,
         totalUnpaid: 0
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November"],
+        unpaidMonths: ["Desember"],
+        totalPaid: 11,
+        totalUnpaid: 1
       }
     },
     {
@@ -175,6 +211,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: ["Agustus", "September", "Oktober", "November", "Desember"],
         totalPaid: 7,
         totalUnpaid: 5
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November"],
+        unpaidMonths: ["Desember"],
+        totalPaid: 11,
+        totalUnpaid: 1
       }
     },
     {
@@ -187,6 +229,12 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         unpaidMonths: ["November", "Desember"],
         totalPaid: 10,
         totalUnpaid: 2
+      },
+      syahriahPaymentDetails: {
+        paidMonths: ["Januari", "Februari", "Maret", "April", "Mei"],
+        unpaidMonths: ["Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        totalPaid: 5,
+        totalUnpaid: 7
       }
     }
   ]);
@@ -326,6 +374,13 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
               unpaidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
               totalPaid: 0,
               totalUnpaid: 12
+            },
+            // Preserve existing Syahriah payment details if not provided
+            syahriahPaymentDetails: santri.syahriahPaymentDetails || item.syahriahPaymentDetails || {
+              paidMonths: [],
+              unpaidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+              totalPaid: 0,
+              totalUnpaid: 12
             }
           } : item
         )
@@ -337,6 +392,13 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         id: Math.max(...santriList.map(s => s.id)) + 1,
         // Initialize SPP payment details for new santri
         sppPaymentDetails: santri.sppPaymentDetails || {
+          paidMonths: [],
+          unpaidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+          totalPaid: 0,
+          totalUnpaid: 12
+        },
+        // Initialize Syahriah payment details for new santri
+        syahriahPaymentDetails: santri.syahriahPaymentDetails || {
           paidMonths: [],
           unpaidMonths: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
           totalPaid: 0,
