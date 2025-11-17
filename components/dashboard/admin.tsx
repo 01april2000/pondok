@@ -11,6 +11,8 @@ import SyahriahFormModal from "./admin/SyahriahFormModal";
 import SearchComponent from "./admin/SearchComponent";
 import SantriManagement from "./admin/SantriManagement";
 import SantriFormModal from "./admin/SantriFormModal";
+import UangSakuManagement from "./admin/UangSakuManagement";
+import UangSakuFormModal from "./admin/UangSakuFormModal";
 
 interface MenuItem {
   key: string;
@@ -226,6 +228,116 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
   const [santriModalMode, setSantriModalMode] = useState<"add" | "edit">("add");
   const [editingSantri, setEditingSantri] = useState<any>(null);
 
+  // Uang Saku state
+  const [isUangSakuModalOpen, setIsUangSakuModalOpen] = useState(false);
+  const [uangSakuModalMode, setUangSakuModalMode] = useState<"add" | "edit">("add");
+  const [editingUangSakuTransaction, setEditingUangSakuTransaction] = useState<any>(null);
+  const [selectedSantriId, setSelectedSantriId] = useState<number | null>(null);
+  
+  // Santri balance state
+  const [santriBalances, setSantriBalances] = useState<{ [key: number]: number }>({
+    1: 250000,
+    2: 150000,
+    3: 50000,
+    4: 300000,
+    5: 75000,
+    6: 200000,
+    7: 100000,
+    8: 180000,
+  });
+  
+  // Transaction list state
+  const [transactions, setTransactions] = useState([
+    {
+      id: 1,
+      santriId: 1,
+      santriName: "Ahmad Fauzi",
+      description: "Top up Uang Saku",
+      amount: 100000,
+      type: "topup" as const,
+      time: "2 hours ago",
+      status: "Completed" as const,
+      statusColor: "green" as const
+    },
+    {
+      id: 2,
+      santriId: 2,
+      santriName: "Siti Nurhaliza",
+      description: "Pembelian Kantin",
+      amount: 25000,
+      type: "withdrawal" as const,
+      time: "5 hours ago",
+      status: "Completed" as const,
+      statusColor: "green" as const
+    },
+    {
+      id: 3,
+      santriId: 3,
+      santriName: "Budi Santoso",
+      description: "Top up Uang Saku",
+      amount: 50000,
+      type: "topup" as const,
+      time: "1 day ago",
+      status: "Pending" as const,
+      statusColor: "yellow" as const
+    },
+    {
+      id: 4,
+      santriId: 4,
+      santriName: "Rina Wijaya",
+      description: "Pembelian Laundry",
+      amount: 15000,
+      type: "withdrawal" as const,
+      time: "2 days ago",
+      status: "Completed" as const,
+      statusColor: "green" as const
+    },
+    {
+      id: 5,
+      santriId: 5,
+      santriName: "Andi Pratama",
+      description: "Top up Uang Saku",
+      amount: 75000,
+      type: "topup" as const,
+      time: "3 days ago",
+      status: "Completed" as const,
+      statusColor: "green" as const
+    },
+    {
+      id: 6,
+      santriId: 6,
+      santriName: "Dewi Lestari",
+      description: "Pembelian Kantin",
+      amount: 30000,
+      type: "withdrawal" as const,
+      time: "4 days ago",
+      status: "Failed" as const,
+      statusColor: "red" as const
+    },
+    {
+      id: 7,
+      santriId: 7,
+      santriName: "Eko Susilo",
+      description: "Top up Uang Saku",
+      amount: 100000,
+      type: "topup" as const,
+      time: "5 days ago",
+      status: "Completed" as const,
+      statusColor: "green" as const
+    },
+    {
+      id: 8,
+      santriId: 8,
+      santriName: "Fitri Handayani",
+      description: "Pembelian Buku",
+      amount: 45000,
+      type: "withdrawal" as const,
+      time: "1 week ago",
+      status: "Completed" as const,
+      statusColor: "green" as const
+    }
+  ]);
+
   const handleMenuClick = (menuKey: string, hasSubmenu = false) => {
     setActiveMenu(menuKey);
     if (hasSubmenu) {
@@ -407,6 +519,55 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     setIsSantriModalOpen(true);
   };
 
+  // Uang Saku handlers
+  const openEditUangSakuModal = (transaction: any) => {
+    setEditingUangSakuTransaction(transaction);
+    setUangSakuModalMode("edit");
+    setIsUangSakuModalOpen(true);
+  };
+
+  const openAddUangSakuDialog = (santriId: number) => {
+    setSelectedSantriId(santriId);
+    setUangSakuModalMode("add");
+    setIsUangSakuModalOpen(true);
+  };
+
+  const handleSaveUangSaku = (transaction: any) => {
+    // Update the transaction list
+    if (uangSakuModalMode === "edit") {
+      // Update existing transaction
+      setTransactions(prevTransactions =>
+        prevTransactions.map(t =>
+          t.id === transaction.id ? transaction : t
+        )
+      );
+    } else {
+      // Add new transaction
+      setTransactions(prevTransactions => [transaction, ...prevTransactions]);
+    }
+    
+    // Update santri balance if transaction is completed
+    if (transaction.status === "Completed") {
+      setSantriBalances(prevBalances => {
+        const currentBalance = prevBalances[transaction.santriId] || 0;
+        let newBalance;
+        
+        if (transaction.type === "topup") {
+          newBalance = currentBalance + transaction.amount;
+        } else {
+          newBalance = currentBalance - transaction.amount;
+        }
+        
+        return {
+          ...prevBalances,
+          [transaction.santriId]: newBalance
+        };
+      });
+    }
+    
+    setIsUangSakuModalOpen(false);
+  };
+
   const handleViewSantriDetails = (santri: any) => {
     // This function will be handled by the SantriManagement component itself
     // We're passing it as a prop, but the actual implementation is in SantriManagement
@@ -473,6 +634,15 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
               santriList={santriList}
             />
           )}
+          {activeMenu === 'uang-saku' && (
+            <UangSakuManagement
+              onEditModalOpen={openEditUangSakuModal}
+              onAddNewTransaction={openAddUangSakuDialog}
+              onViewDetails={handleViewDetails}
+              santriBalances={santriBalances}
+              transactions={transactions}
+            />
+          )}
         </main>
       </div>
 
@@ -509,6 +679,20 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         mode={santriModalMode}
         initialData={santriModalMode === "edit" ? editingSantri : undefined}
         onSubmit={handleSaveSantri}
+      />
+
+      {/* Uang Saku Form Modal (Add/Edit) */}
+      <UangSakuFormModal
+        isOpen={isUangSakuModalOpen}
+        onClose={() => setIsUangSakuModalOpen(false)}
+        mode={uangSakuModalMode}
+        initialData={uangSakuModalMode === "edit" ? {
+          transaction: editingUangSakuTransaction
+        } : {
+          santriId: selectedSantriId || undefined
+        }}
+        onSubmit={handleSaveUangSaku}
+        santriBalances={santriBalances}
       />
     </div>
   );
