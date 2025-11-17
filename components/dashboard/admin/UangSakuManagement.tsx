@@ -484,8 +484,8 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
       {/* All Transactions Modal */}
       {showAllTransactions && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-4xl w-full flex flex-col border border-slate-600" style={{ maxHeight: '80vh' }}>
-            <div className="flex items-center justify-between p-4 border-b border-slate-600 shrink-0">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-6xl w-full h-[85vh] flex flex-col border border-slate-600">
+            <div className="flex items-center justify-between p-4 border-b border-slate-600 flex-shrink-0">
               <h2 className="text-xl font-semibold text-white">Semua Transaksi Uang Saku</h2>
               <button
                 onClick={() => setShowAllTransactions(false)}
@@ -494,81 +494,83 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <ScrollArea className="flex-1 p-4" style={{ maxHeight: 'calc(80vh - 140px)' }}>
-              <div className="space-y-3">
-                {transactions.map((transaction) => (
-                  <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-10 h-10 ${
-                          transaction.statusColor === 'green' ? 'bg-emerald-500/20' : 
-                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' : 
-                          'bg-red-500/20'
-                        } rounded-full flex items-center justify-center`}>
-                          {transaction.type === 'topup' ? (
-                            <Plus className={`w-5 h-5 ${
-                              transaction.statusColor === 'green' ? 'text-emerald-400' : 
-                              transaction.statusColor === 'yellow' ? 'text-yellow-400' : 
-                              'text-red-400'
-                            }`} />
-                          ) : (
-                            <Wallet className={`w-5 h-5 ${
-                              transaction.statusColor === 'green' ? 'text-emerald-400' : 
-                              transaction.statusColor === 'yellow' ? 'text-yellow-400' : 
-                              'text-red-400'
-                            }`} />
-                          )}
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full p-4">
+                <div className="space-y-3">
+                  {transactions.map((transaction) => (
+                    <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className={`w-10 h-10 ${
+                            transaction.statusColor === 'green' ? 'bg-emerald-500/20' :
+                            transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' :
+                            'bg-red-500/20'
+                          } rounded-full flex items-center justify-center`}>
+                            {transaction.type === 'topup' ? (
+                              <Plus className={`w-5 h-5 ${
+                                transaction.statusColor === 'green' ? 'text-emerald-400' :
+                                transaction.statusColor === 'yellow' ? 'text-yellow-400' :
+                                'text-red-400'
+                              }`} />
+                            ) : (
+                              <Wallet className={`w-5 h-5 ${
+                                transaction.statusColor === 'green' ? 'text-emerald-400' :
+                                transaction.statusColor === 'yellow' ? 'text-yellow-400' :
+                                'text-red-400'
+                              }`} />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-slate-100">{transaction.santriName}</h4>
+                            <p className="text-sm text-slate-400">{transaction.description}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-medium text-slate-100">{transaction.santriName}</h4>
-                          <p className="text-sm text-slate-400">{transaction.description}</p>
+                        <div className="text-right">
+                          <p className={`font-semibold ${
+                            transaction.type === 'topup' ? 'text-emerald-400' : 'text-red-400'
+                          }`}>
+                            {transaction.type === 'topup' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                          </p>
+                          <p className="text-sm text-slate-400">{transaction.time}</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className={`font-semibold ${
-                          transaction.type === 'topup' ? 'text-emerald-400' : 'text-red-400'
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' :
+                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
+                          'bg-red-500/20 text-red-400'
                         }`}>
-                          {transaction.type === 'topup' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                        </p>
-                        <p className="text-sm text-slate-400">{transaction.time}</p>
+                          {transaction.status}
+                        </span>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              onEditModalOpen(transaction);
+                              setShowAllTransactions(false);
+                            }}
+                            className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedTransaction(transaction);
+                              setShowAllTransactions(false);
+                            }}
+                            className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            View Details
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' : 
-                        transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' : 
-                        'bg-red-500/20 text-red-400'
-                      }`}>
-                        {transaction.status}
-                      </span>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => {
-                            onEditModalOpen(transaction);
-                            setShowAllTransactions(false);
-                          }}
-                          className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
-                        >
-                          <Edit className="w-4 h-4 mr-1" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => {
-                            setSelectedTransaction(transaction);
-                            setShowAllTransactions(false);
-                          }}
-                          className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
-                          View Details
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-            <div className="flex justify-end p-4 border-t border-slate-600 shrink-0">
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+            <div className="flex justify-end p-4 border-t border-slate-600 flex-shrink-0">
               <button
                 onClick={() => setShowAllTransactions(false)}
                 className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg"
@@ -583,8 +585,8 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
       {/* All Santri Modal */}
       {showAllSantri && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-4xl w-full flex flex-col border border-slate-600" style={{ maxHeight: '80vh' }}>
-            <div className="flex items-center justify-between p-4 border-b border-slate-600 shrink-0">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-6xl w-full h-[85vh] flex flex-col border border-slate-600">
+            <div className="flex items-center justify-between p-4 border-b border-slate-600 flex-shrink-0">
               <h2 className="text-xl font-semibold text-white">Semua Santri</h2>
               <button
                 onClick={() => setShowAllSantri(false)}
@@ -593,64 +595,66 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <ScrollArea className="flex-1 p-4" style={{ maxHeight: 'calc(80vh - 140px)' }}>
-              <div className="overflow-x-auto">
-                <table className="w-full table-auto">
-                  <thead>
-                    <tr className="bg-slate-900/50">
-                      <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">NIS</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Nama</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Kelas</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Saldo</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-600">
-                    {santriList.map((santri) => (
-                      <tr key={santri.id} className="hover:bg-slate-600/50 transition-colors">
-                        <td className="px-4 py-3 text-sm text-slate-100">{santri.nis}</td>
-                        <td className="px-4 py-3 text-sm text-slate-100 font-medium">{santri.name}</td>
-                        <td className="px-4 py-3 text-sm text-slate-100">{santri.class}</td>
-                        <td className="px-4 py-3 text-sm">
-                          <span className={`font-semibold ${
-                            santri.balance < 50000 ? 'text-red-400' : 
-                            santri.balance < 100000 ? 'text-yellow-400' : 
-                            'text-emerald-400'
-                          }`}>
-                            {formatCurrency(santri.balance)}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-sm">
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => {
-                                onAddNewTransaction(santri.id, "topup");
-                                setShowAllSantri(false);
-                              }}
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
-                            >
-                              <Plus className="w-3 h-3 mr-1" />
-                              Top Up
-                            </button>
-                            <button
-                              onClick={() => {
-                                onAddNewTransaction(santri.id, "withdrawal");
-                                setShowAllSantri(false);
-                              }}
-                              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
-                            >
-                              <Wallet className="w-3 h-3 mr-1" />
-                              Tarik
-                            </button>
-                          </div>
-                        </td>
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full p-4">
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead className="sticky top-0 z-10 bg-slate-900/50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">NIS</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Nama</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Kelas</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Saldo</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </ScrollArea>
-            <div className="flex justify-end p-4 border-t border-slate-600 shrink-0">
+                    </thead>
+                    <tbody className="divide-y divide-slate-600">
+                      {santriList.map((santri) => (
+                        <tr key={santri.id} className="hover:bg-slate-600/50 transition-colors">
+                          <td className="px-4 py-3 text-sm text-slate-100">{santri.nis}</td>
+                          <td className="px-4 py-3 text-sm text-slate-100 font-medium">{santri.name}</td>
+                          <td className="px-4 py-3 text-sm text-slate-100">{santri.class}</td>
+                          <td className="px-4 py-3 text-sm">
+                            <span className={`font-semibold ${
+                              santri.balance < 50000 ? 'text-red-400' :
+                              santri.balance < 100000 ? 'text-yellow-400' :
+                              'text-emerald-400'
+                            }`}>
+                              {formatCurrency(santri.balance)}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm">
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => {
+                                  onAddNewTransaction(santri.id, "topup");
+                                  setShowAllSantri(false);
+                                }}
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                              >
+                                <Plus className="w-3 h-3 mr-1" />
+                                Top Up
+                              </button>
+                              <button
+                                onClick={() => {
+                                  onAddNewTransaction(santri.id, "withdrawal");
+                                  setShowAllSantri(false);
+                                }}
+                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                              >
+                                <Wallet className="w-3 h-3 mr-1" />
+                                Tarik
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </ScrollArea>
+            </div>
+            <div className="flex justify-end p-4 border-t border-slate-600 flex-shrink-0">
               <button
                 onClick={() => setShowAllSantri(false)}
                 className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg"
