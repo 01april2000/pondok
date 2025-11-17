@@ -379,7 +379,7 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
       {/* All Transactions Modal */}
       {showAllTransactions && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-4xl w-full flex flex-col border border-slate-600" style={{ maxHeight: '80vh' }}>
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-6xl w-full h-[85vh] flex flex-col border border-slate-600">
             <div className="flex items-center justify-between p-4 border-b border-slate-600 flex-shrink-0">
               <h2 className="text-xl font-semibold text-white">Semua Transaksi SPP</h2>
               <button
@@ -389,56 +389,66 @@ export default function SPPManagement({ onEditModalOpen, sppClasses, onDeleteCla
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <ScrollArea className="flex-1 p-4" style={{ maxHeight: 'calc(80vh - 140px)' }}>
-              <div className="space-y-3">
-                {transactions.map((transaction) => (
-                  <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-10 h-10 ${
-                          transaction.statusColor === 'green' ? 'bg-emerald-500/20' : 
-                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' : 
-                          'bg-red-500/20'
-                        } rounded-full flex items-center justify-center`}>
-                          <DollarSign className={`w-5 h-5 ${
-                            transaction.statusColor === 'green' ? 'text-emerald-400' : 
-                            transaction.statusColor === 'yellow' ? 'text-yellow-400' : 
-                            'text-red-400'
-                          }`} />
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full p-4">
+                <div className="space-y-3">
+                  {transactions.map((transaction) => (
+                    <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className={`w-10 h-10 ${
+                            transaction.statusColor === 'green' ? 'bg-emerald-500/20' :
+                            transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' :
+                            'bg-red-500/20'
+                          } rounded-full flex items-center justify-center`}>
+                            <DollarSign className={`w-5 h-5 ${
+                              transaction.statusColor === 'green' ? 'text-emerald-400' :
+                              transaction.statusColor === 'yellow' ? 'text-yellow-400' :
+                              'text-red-400'
+                            }`} />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-slate-100">{transaction.name}</h4>
+                            <p className="text-sm text-slate-400">{transaction.description}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-medium text-slate-100">{transaction.name}</h4>
-                          <p className="text-sm text-slate-400">{transaction.description}</p>
+                        <div className="text-right">
+                          <p className="font-semibold text-emerald-400">{transaction.amount}</p>
+                          <p className="text-sm text-slate-400">{transaction.time}</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-emerald-400">{transaction.amount}</p>
-                        <p className="text-sm text-slate-400">{transaction.time}</p>
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' :
+                          transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
+                          'bg-red-500/20 text-red-400'
+                        }`}>
+                          {transaction.status}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setSelectedTransaction(transaction);
+                            setShowAllTransactions(false);
+                          }}
+                          className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Details
+                        </button>
                       </div>
                     </div>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' : 
-                        transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' : 
-                        'bg-red-500/20 text-red-400'
-                      }`}>
-                        {transaction.status}
-                      </span>
-                      <button
-                        onClick={() => {
-                          setSelectedTransaction(transaction);
-                          setShowAllTransactions(false);
-                        }}
-                        className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
-                      >
-                        <Eye className="w-4 h-4 mr-1" />
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+            <div className="flex justify-end p-4 border-t border-slate-600 flex-shrink-0">
+              <button
+                onClick={() => setShowAllTransactions(false)}
+                className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       )}
