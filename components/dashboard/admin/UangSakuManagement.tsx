@@ -37,7 +37,7 @@ interface Transaction {
 
 interface UangSakuManagementProps {
   onEditModalOpen: (transaction: Transaction) => void;
-  onAddNewTransaction: (santriId: number) => void;
+  onAddNewTransaction: (santriId: number, type: "topup" | "withdrawal") => void;
   onViewDetails: (transactionId: number) => void;
   santriBalances?: { [key: number]: number };
   transactions?: Transaction[];
@@ -197,13 +197,22 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                           </span>
                         </td>
                         <td className="px-4 py-3 text-sm">
-                          <button
-                            onClick={() => onAddNewTransaction(santri.id)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
-                          >
-                            <Plus className="w-3 h-3 mr-1" />
-                            Top Up
-                          </button>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => onAddNewTransaction(santri.id, "topup")}
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                            >
+                              <Plus className="w-3 h-3 mr-1" />
+                              Top Up
+                            </button>
+                            <button
+                              onClick={() => onAddNewTransaction(santri.id, "withdrawal")}
+                              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                            >
+                              <Wallet className="w-3 h-3 mr-1" />
+                              Tarik
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -223,7 +232,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
               <div className="mt-6 flex justify-center">
                 <Pagination>
                   <PaginationContent>
-                    <PaginationItem>
+                    <PaginationItem className="text-white">
                       <PaginationPrevious
                         onClick={() => handleSantriPageChange(santriCurrentPage - 1)}
                         className={santriCurrentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
@@ -231,7 +240,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                     </PaginationItem>
                       
                     {Array.from({ length: santriTotalPages }, (_, i) => i + 1).map((page) => (
-                      <PaginationItem key={page}>
+                      <PaginationItem key={page} className="text-white">
                         <PaginationLink
                           onClick={() => handleSantriPageChange(page)}
                           isActive={santriCurrentPage === page}
@@ -242,7 +251,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                       </PaginationItem>
                     ))}
                       
-                    <PaginationItem>
+                    <PaginationItem className="text-white">
                       <PaginationNext
                         onClick={() => handleSantriPageChange(santriCurrentPage + 1)}
                         className={santriCurrentPage === santriTotalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
@@ -372,7 +381,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
               <div className="mt-6 flex justify-center">
                 <Pagination>
                   <PaginationContent>
-                    <PaginationItem>
+                    <PaginationItem className="text-white">
                       <PaginationPrevious
                         onClick={() => handlePageChange(currentPage - 1)}
                         className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
@@ -380,7 +389,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                     </PaginationItem>
                       
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <PaginationItem key={page}>
+                      <PaginationItem key={page} className="text-white">
                         <PaginationLink
                           onClick={() => handlePageChange(page)}
                           isActive={currentPage === page}
@@ -391,7 +400,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                       </PaginationItem>
                     ))}
                       
-                    <PaginationItem>
+                    <PaginationItem className="text-white">
                       <PaginationNext
                         onClick={() => handlePageChange(currentPage + 1)}
                         className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
@@ -612,16 +621,28 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                           </span>
                         </td>
                         <td className="px-4 py-3 text-sm">
-                          <button
-                            onClick={() => {
-                              onAddNewTransaction(santri.id);
-                              setShowAllSantri(false);
-                            }}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
-                          >
-                            <Plus className="w-3 h-3 mr-1" />
-                            Top Up
-                          </button>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => {
+                                onAddNewTransaction(santri.id, "topup");
+                                setShowAllSantri(false);
+                              }}
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                            >
+                              <Plus className="w-3 h-3 mr-1" />
+                              Top Up
+                            </button>
+                            <button
+                              onClick={() => {
+                                onAddNewTransaction(santri.id, "withdrawal");
+                                setShowAllSantri(false);
+                              }}
+                              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                            >
+                              <Wallet className="w-3 h-3 mr-1" />
+                              Tarik
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

@@ -233,6 +233,7 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
   const [uangSakuModalMode, setUangSakuModalMode] = useState<"add" | "edit">("add");
   const [editingUangSakuTransaction, setEditingUangSakuTransaction] = useState<any>(null);
   const [selectedSantriId, setSelectedSantriId] = useState<number | null>(null);
+  const [transactionType, setTransactionType] = useState<"topup" | "withdrawal" | null>(null);
   
   // Santri balance state
   const [santriBalances, setSantriBalances] = useState<{ [key: number]: number }>({
@@ -526,8 +527,9 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     setIsUangSakuModalOpen(true);
   };
 
-  const openAddUangSakuDialog = (santriId: number) => {
+  const openAddUangSakuDialog = (santriId: number, type: "topup" | "withdrawal") => {
     setSelectedSantriId(santriId);
+    setTransactionType(type);
     setUangSakuModalMode("add");
     setIsUangSakuModalOpen(true);
   };
@@ -689,7 +691,8 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         initialData={uangSakuModalMode === "edit" ? {
           transaction: editingUangSakuTransaction
         } : {
-          santriId: selectedSantriId || undefined
+          santriId: selectedSantriId || undefined,
+          transactionType: transactionType || undefined
         }}
         onSubmit={handleSaveUangSaku}
         santriBalances={santriBalances}

@@ -32,6 +32,7 @@ interface UangSakuFormModalProps {
   initialData?: {
     transaction?: Transaction;
     santriId?: number;
+    transactionType?: "topup" | "withdrawal";
   };
   onSubmit: (transaction: any) => void;
   santriBalances?: { [key: number]: number };
@@ -48,7 +49,7 @@ export default function UangSakuFormModal({
   const [santriId, setSantriId] = useState<number>(initialData?.santriId || 0);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [type, setType] = useState<"topup" | "withdrawal">("topup");
+  const [type, setType] = useState<"topup" | "withdrawal">(initialData?.transactionType || "topup");
   const [status, setStatus] = useState<"Completed" | "Pending" | "Failed">("Completed");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -77,10 +78,10 @@ export default function UangSakuFormModal({
       // Reset form for adding new transaction
       setDescription("");
       setAmount("");
-      setType("topup");
+      setType(initialData?.transactionType || "topup");
       setStatus("Completed");
       setErrors({});
-      // Set santriId from initialData if available (for topup action)
+      // Set santriId from initialData if available (for topup/withdrawal action)
       if (initialData?.santriId) {
         setSantriId(initialData.santriId);
       }
@@ -138,7 +139,10 @@ export default function UangSakuFormModal({
       <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-md w-full border border-slate-600">
         <div className="flex items-center justify-between p-4 border-b border-slate-600">
           <AlertTitle className="text-lg font-semibold text-white">
-            {mode === "add" ? "Tambah Transaksi Uang Saku" : "Edit Transaksi Uang Saku"}
+            {mode === "add" ?
+              (type === "topup" ? "Top Up Uang Saku" : "Penarikan Uang Saku") :
+              "Edit Transaksi Uang Saku"
+            }
           </AlertTitle>
           <button
             onClick={onClose}
@@ -174,34 +178,7 @@ export default function UangSakuFormModal({
             )}
           </div>
 
-          {/* Transaction Type */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">
-              Jenis Transaksi
-            </label>
-            <div className="flex space-x-4">
-              <label className="flex items-center space-x-2 text-slate-300">
-                <input
-                  type="radio"
-                  value="topup"
-                  checked={type === "topup"}
-                  onChange={(e) => setType(e.target.value as "topup" | "withdrawal")}
-                  className="text-emerald-500 focus:ring-emerald-500"
-                />
-                <span>Top Up</span>
-              </label>
-              <label className="flex items-center space-x-2 text-slate-300">
-                <input
-                  type="radio"
-                  value="withdrawal"
-                  checked={type === "withdrawal"}
-                  onChange={(e) => setType(e.target.value as "topup" | "withdrawal")}
-                  className="text-emerald-500 focus:ring-emerald-500"
-                />
-                <span>Penarikan</span>
-              </label>
-            </div>
-          </div>
+         
 
           {/* Description */}
           <div>
@@ -212,7 +189,7 @@ export default function UangSakuFormModal({
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Contoh: Top up uang saku bulanan"
+              placeholder={type === "topup" ? "Contoh: Top up uang saku bulanan" : "Contoh: Penarikan untuk keperluan sekolah"}
               className={`w-full px-3 py-2 border rounded-md bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                 errors.description ? "border-red-500" : "border-slate-500"
               }`}
@@ -282,7 +259,10 @@ export default function UangSakuFormModal({
               type="submit"
               className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
             >
-              {mode === "add" ? "Tambah Transaksi" : "Simpan Perubahan"}
+              {mode === "add" ?
+                (type === "topup" ? "Top Up" : "Tarik") :
+                "Simpan Perubahan"
+              }
             </Button>
           </div>
         </form>

@@ -553,7 +553,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
             <div className="mt-6 flex justify-center">
               <Pagination>
                 <PaginationContent>
-                  <PaginationItem>
+                  <PaginationItem className="text-white">
                     <PaginationPrevious
                       onClick={() => handlePageChange(currentPage - 1)}
                       className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
@@ -561,7 +561,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
                   </PaginationItem>
                   
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
+                    <PaginationItem key={page} className="text-white">
                       <PaginationLink
                         onClick={() => handlePageChange(page)}
                         isActive={currentPage === page}
@@ -572,7 +572,7 @@ export default function SyahriahManagement({ onEditModalOpen, syahriahClasses, o
                     </PaginationItem>
                   ))}
                   
-                  <PaginationItem>
+                  <PaginationItem className="text-white">
                     <PaginationNext
                       onClick={() => handlePageChange(currentPage + 1)}
                       className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
