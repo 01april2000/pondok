@@ -13,6 +13,10 @@ import SantriManagement from "./admin/SantriManagement";
 import SantriFormModal from "./admin/SantriFormModal";
 import UangSakuManagement from "./admin/UangSakuManagement";
 import UangSakuFormModal from "./admin/UangSakuFormModal";
+import LaundryPaymentManagement from "./admin/LaundryPaymentManagement";
+import LaundryTransactionHistory from "./admin/LaundryTransactionHistory";
+import LaundryPaymentFormModal from "./admin/LaundryPaymentFormModal";
+import LaundryTransactionFormModal from "./admin/LaundryTransactionFormModal";
 
 interface MenuItem {
   key: string;
@@ -339,6 +343,97 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     }
   ]);
 
+  // Laundry state
+  const [activeLaundryTab, setActiveLaundryTab] = useState("payment");
+  const [isLaundryPaymentModalOpen, setIsLaundryPaymentModalOpen] = useState(false);
+  const [isLaundryTransactionModalOpen, setIsLaundryTransactionModalOpen] = useState(false);
+  
+  const [laundryPaymentModalMode, setLaundryPaymentModalMode] = useState<"add" | "edit">("add");
+  const [laundryTransactionModalMode, setLaundryTransactionModalMode] = useState<"add" | "edit">("add");
+  
+  const [editingLaundryPaymentClass, setEditingLaundryPaymentClass] = useState<any>(null);
+  const [editingLaundryTransaction, setEditingLaundryTransaction] = useState<any>(null);
+
+  // Sample laundry services for transaction dropdown
+  const laundryServices = [
+    { id: 1, name: "Cuci Reguler", pricePerKg: "Rp 5.000" },
+    { id: 2, name: "Cuci + Setrika", pricePerKg: "Rp 8.000" },
+    { id: 3, name: "Dry Cleaning", pricePerKg: "Rp 15.000" },
+    { id: 4, name: "Cuci Karpet", pricePerKg: "Rp 12.000" },
+    { id: 5, name: "Cuci Bed Cover", pricePerKg: "Rp 10.000" }
+  ];
+
+  const [laundryPaymentClasses, setLaundryPaymentClasses] = useState([
+    {
+      id: 1,
+      name: "Class X",
+      monthlyPrice: "Rp 50.000",
+      yearlyPrice: "Rp 600.000"
+    },
+    {
+      id: 2,
+      name: "Class XI",
+      monthlyPrice: "Rp 55.000",
+      yearlyPrice: "Rp 660.000"
+    },
+    {
+      id: 3,
+      name: "Class XII",
+      monthlyPrice: "Rp 60.000",
+      yearlyPrice: "Rp 720.000"
+    }
+  ]);
+
+  const [laundryTransactions, setLaundryTransactions] = useState([
+    {
+      id: 1,
+      santriId: 1,
+      santriName: "Ahmad Fauzi",
+      santriClass: "X-A",
+      serviceName: "Cuci Reguler",
+      weight: 3.5,
+      totalPrice: "Rp 17.500",
+      date: "2023-11-15",
+      status: "Completed" as const,
+      paymentMethod: "Cash" as const
+    },
+    {
+      id: 2,
+      santriId: 2,
+      santriName: "Siti Nurhaliza",
+      santriClass: "XI-B",
+      serviceName: "Cuci + Setrika",
+      weight: 2.0,
+      totalPrice: "Rp 16.000",
+      date: "2023-11-16",
+      status: "Processing" as const,
+      paymentMethod: "Uang Saku" as const
+    },
+    {
+      id: 3,
+      santriId: 3,
+      santriName: "Budi Santoso",
+      santriClass: "X-C",
+      serviceName: "Dry Cleaning",
+      weight: 1.5,
+      totalPrice: "Rp 22.500",
+      date: "2023-11-17",
+      status: "Pending" as const,
+      paymentMethod: "Transfer" as const
+    }
+  ]);
+
+  const [laundrySantriList] = useState([
+    { id: 1, name: "Ahmad Fauzi", class: "X-A" },
+    { id: 2, name: "Siti Nurhaliza", class: "XI-B" },
+    { id: 3, name: "Budi Santoso", class: "X-C" },
+    { id: 4, name: "Rina Wijaya", class: "XII-A" },
+    { id: 5, name: "Andi Pratama", class: "XI-C" },
+    { id: 6, name: "Dewi Lestari", class: "X-B" },
+    { id: 7, name: "Eko Susilo", class: "XII-B" },
+    { id: 8, name: "Fitri Handayani", class: "X-D" }
+  ]);
+
   const handleMenuClick = (menuKey: string, hasSubmenu = false) => {
     setActiveMenu(menuKey);
     if (hasSubmenu) {
@@ -580,6 +675,82 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     alert(`Viewing details for transaction ID: ${transactionId}`);
   };
 
+  // Laundry handlers
+  const openEditLaundryPaymentModal = (classData: any) => {
+    setEditingLaundryPaymentClass(classData);
+    setLaundryPaymentModalMode("edit");
+    setIsLaundryPaymentModalOpen(true);
+  };
+
+  const handleSaveLaundryPaymentClass = (classData: any) => {
+    if (laundryPaymentModalMode === "edit" && editingLaundryPaymentClass) {
+      setLaundryPaymentClasses(prevClasses =>
+        prevClasses.map(c =>
+          c.id === editingLaundryPaymentClass.id
+            ? {
+                ...classData,
+                id: editingLaundryPaymentClass.id,
+                monthlyPrice: `Rp ${parseInt(classData.monthlyPrice).toLocaleString('id-ID')}`,
+                yearlyPrice: `Rp ${parseInt(classData.yearlyPrice).toLocaleString('id-ID')}`
+              }
+            : c
+        )
+      );
+    } else {
+      // Add new class
+      const newClass = {
+        ...classData,
+        id: Math.max(...laundryPaymentClasses.map(c => c.id || 0)) + 1,
+        monthlyPrice: `Rp ${parseInt(classData.monthlyPrice).toLocaleString('id-ID')}`,
+        yearlyPrice: `Rp ${parseInt(classData.yearlyPrice).toLocaleString('id-ID')}`
+      };
+      setLaundryPaymentClasses(prevClasses => [...prevClasses, newClass]);
+    }
+    setIsLaundryPaymentModalOpen(false);
+  };
+
+  const handleDeleteLaundryPaymentClass = (id: number) => {
+    if (window.confirm("Are you sure you want to delete this class?")) {
+      setLaundryPaymentClasses(prevClasses =>
+        prevClasses.filter(classItem => classItem.id !== id)
+      );
+    }
+  };
+
+  const openEditLaundryTransactionModal = (transaction: any) => {
+    setEditingLaundryTransaction(transaction);
+    setLaundryTransactionModalMode("edit");
+    setIsLaundryTransactionModalOpen(true);
+  };
+
+  const handleSaveLaundryTransaction = (transaction: any) => {
+    if (laundryTransactionModalMode === "edit" && editingLaundryTransaction) {
+      setLaundryTransactions(prevTransactions =>
+        prevTransactions.map(t =>
+          t.id === editingLaundryTransaction.id
+            ? { ...transaction, id: editingLaundryTransaction.id }
+            : t
+        )
+      );
+    } else {
+      // Add new transaction
+      const newTransaction = {
+        ...transaction,
+        id: Math.max(...laundryTransactions.map(t => t.id || 0)) + 1
+      };
+      setLaundryTransactions(prevTransactions => [newTransaction, ...prevTransactions]);
+    }
+    setIsLaundryTransactionModalOpen(false);
+  };
+
+  const handleDeleteLaundryTransaction = (id: number) => {
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
+      setLaundryTransactions(prevTransactions =>
+        prevTransactions.filter(transaction => transaction.id !== id)
+      );
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Sidebar */}
@@ -645,6 +816,62 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
               transactions={transactions}
             />
           )}
+          {activeMenu === 'laundry' && (
+            <div className="space-y-6">
+              <div className="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <h1 className="text-3xl font-bold text-white mb-6">Menu Laundry</h1>
+                
+                <div className="flex flex-wrap border-b border-slate-700">
+                  <button
+                    className={`py-2 px-4 text-sm font-medium ${
+                      activeLaundryTab === "payment"
+                        ? "border-b-2 border-emerald-500 text-emerald-400"
+                        : "text-slate-400 hover:text-slate-300"
+                    }`}
+                    onClick={() => setActiveLaundryTab("payment")}
+                  >
+                    Pembayaran Bulanan
+                  </button>
+                  <button
+                    className={`py-2 px-4 text-sm font-medium ${
+                      activeLaundryTab === "history"
+                        ? "border-b-2 border-emerald-500 text-emerald-400"
+                        : "text-slate-400 hover:text-slate-300"
+                    }`}
+                    onClick={() => setActiveLaundryTab("history")}
+                  >
+                    Riwayat Transaksi
+                  </button>
+                </div>
+              </div>
+
+              {activeLaundryTab === "payment" && (
+                <LaundryPaymentManagement
+                  onEditModalOpen={openEditLaundryPaymentModal}
+                  laundryClasses={laundryPaymentClasses}
+                  onDeleteClass={handleDeleteLaundryPaymentClass}
+                  onAddNewClass={() => {
+                    setLaundryPaymentModalMode("add");
+                    setIsLaundryPaymentModalOpen(true);
+                  }}
+                  onViewDetails={handleViewDetails}
+                />
+              )}
+
+              {activeLaundryTab === "history" && (
+                <LaundryTransactionHistory
+                  onEditModalOpen={openEditLaundryTransactionModal}
+                  transactions={laundryTransactions}
+                  onDeleteTransaction={handleDeleteLaundryTransaction}
+                  onAddNewTransaction={() => {
+                    setLaundryTransactionModalMode("add");
+                    setIsLaundryTransactionModalOpen(true);
+                  }}
+                  onViewDetails={handleViewDetails}
+                />
+              )}
+            </div>
+          )}
         </main>
       </div>
 
@@ -696,6 +923,26 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         }}
         onSubmit={handleSaveUangSaku}
         santriBalances={santriBalances}
+      />
+
+      {/* Laundry Payment Form Modal */}
+      <LaundryPaymentFormModal
+        isOpen={isLaundryPaymentModalOpen}
+        onClose={() => setIsLaundryPaymentModalOpen(false)}
+        mode={laundryPaymentModalMode}
+        initialData={laundryPaymentModalMode === "edit" ? editingLaundryPaymentClass || undefined : undefined}
+        onSubmit={handleSaveLaundryPaymentClass}
+      />
+
+      {/* Laundry Transaction Form Modal */}
+      <LaundryTransactionFormModal
+        isOpen={isLaundryTransactionModalOpen}
+        onClose={() => setIsLaundryTransactionModalOpen(false)}
+        mode={laundryTransactionModalMode}
+        initialData={laundryTransactionModalMode === "edit" ? editingLaundryTransaction || undefined : undefined}
+        onSubmit={handleSaveLaundryTransaction}
+        santriList={laundrySantriList}
+        laundryServices={laundryServices}
       />
     </div>
   );
