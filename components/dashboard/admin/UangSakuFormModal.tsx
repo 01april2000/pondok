@@ -216,6 +216,23 @@ export default function UangSakuFormModal({
             {errors.amount && (
               <p className="mt-1 text-sm text-red-400">{errors.amount}</p>
             )}
+            
+            {/* Preset Amount Buttons */}
+            <div className="mt-3">
+              <p className="text-xs text-slate-400 mb-2">Pilih cepat:</p>
+              <div className="grid grid-cols-4 gap-2">
+                {[10000, 20000, 50000, 100000].map((presetAmount) => (
+                  <button
+                    key={presetAmount}
+                    type="button"
+                    onClick={() => setAmount(presetAmount.toString())}
+                    className="px-3 py-2 bg-slate-600 hover:bg-emerald-600 text-white text-sm rounded-md transition-colors"
+                  >
+                    {presetAmount.toLocaleString('id-ID')}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Status */}

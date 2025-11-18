@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Edit, Trash2, Eye, DollarSign, X, Plus, Wallet } from "lucide-react";
+import { Edit, Trash2, Eye, DollarSign, X, Plus, Wallet, History } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,6 +47,7 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [showAllTransactions, setShowAllTransactions] = useState(false);
   const [showAllSantri, setShowAllSantri] = useState(false);
+  const [selectedSantriTransactions, setSelectedSantriTransactions] = useState<{ santri: Santri; transactions: Transaction[] } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [santriCurrentPage, setSantriCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -211,6 +212,16 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                             >
                               <Wallet className="w-3 h-3 mr-1" />
                               Tarik
+                            </button>
+                            <button
+                              onClick={() => {
+                                const santriTransactions = transactions.filter(t => t.santriId === santri.id);
+                                setSelectedSantriTransactions({ santri, transactions: santriTransactions });
+                              }}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                            >
+                              <History className="w-3 h-3 mr-1" />
+                              Riwayat
                             </button>
                           </div>
                         </td>
@@ -645,6 +656,17 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
                                 <Wallet className="w-3 h-3 mr-1" />
                                 Tarik
                               </button>
+                              <button
+                                onClick={() => {
+                                  const santriTransactions = transactions.filter(t => t.santriId === santri.id);
+                                  setSelectedSantriTransactions({ santri, transactions: santriTransactions });
+                                  setShowAllSantri(false);
+                                }}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm inline-flex items-center transition-colors"
+                              >
+                                <History className="w-3 h-3 mr-1" />
+                                Riwayat
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -658,6 +680,116 @@ export default function UangSakuManagement({ onEditModalOpen, onAddNewTransactio
               <button
                 onClick={() => setShowAllSantri(false)}
                 className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Santri Transaction History Modal */}
+      {selectedSantriTransactions && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-2xl max-w-4xl w-full h-[85vh] flex flex-col border border-slate-600">
+            <div className="flex items-center justify-between p-4 border-b border-slate-600 flex-shrink-0">
+              <div>
+                <h2 className="text-xl font-semibold text-white">Riwayat Transaksi</h2>
+                <p className="text-sm text-slate-400 mt-1">
+                  {selectedSantriTransactions.santri.name} ({selectedSantriTransactions.santri.nis}) - {selectedSantriTransactions.santri.class}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedSantriTransactions(null)}
+                className="text-slate-400 hover:text-slate-200 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full p-4">
+                {selectedSantriTransactions.transactions.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedSantriTransactions.transactions.map((transaction) => (
+                      <div key={transaction.id} className="border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-300 hover:shadow-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className={`w-10 h-10 ${
+                              transaction.statusColor === 'green' ? 'bg-emerald-500/20' :
+                              transaction.statusColor === 'yellow' ? 'bg-yellow-500/20' :
+                              'bg-red-500/20'
+                            } rounded-full flex items-center justify-center`}>
+                              {transaction.type === 'topup' ? (
+                                <Plus className={`w-5 h-5 ${
+                                  transaction.statusColor === 'green' ? 'text-emerald-400' :
+                                  transaction.statusColor === 'yellow' ? 'text-yellow-400' :
+                                  'text-red-400'
+                                }`} />
+                              ) : (
+                                <Wallet className={`w-5 h-5 ${
+                                  transaction.statusColor === 'green' ? 'text-emerald-400' :
+                                  transaction.statusColor === 'yellow' ? 'text-yellow-400' :
+                                  'text-red-400'
+                                }`} />
+                              )}
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-slate-100">{transaction.description}</h4>
+                              <p className="text-sm text-slate-400">{transaction.time}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className={`font-semibold ${
+                              transaction.type === 'topup' ? 'text-emerald-400' : 'text-red-400'
+                            }`}>
+                              {transaction.type === 'topup' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                            </p>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              transaction.statusColor === 'green' ? 'bg-emerald-500/20 text-emerald-400' :
+                              transaction.statusColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
+                              'bg-red-500/20 text-red-400'
+                            }`}>
+                              {transaction.status}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-3 flex justify-end space-x-2">
+                          <button
+                            onClick={() => {
+                              onEditModalOpen(transaction);
+                              setSelectedSantriTransactions(null);
+                            }}
+                            className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedTransaction(transaction);
+                              setSelectedSantriTransactions(null);
+                            }}
+                            className="text-emerald-400 hover:text-emerald-300 text-sm inline-flex items-center transition-colors"
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-slate-400">
+                    <History className="w-12 h-12 mx-auto mb-4 text-slate-500" />
+                    <p>Belum ada riwayat transaksi untuk {selectedSantriTransactions.santri.name}</p>
+                  </div>
+                )}
+              </ScrollArea>
+            </div>
+            <div className="flex justify-end p-4 border-t border-slate-600 flex-shrink-0">
+              <button
+                onClick={() => setSelectedSantriTransactions(null)}
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 Tutup
               </button>
