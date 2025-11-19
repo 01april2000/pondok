@@ -13,8 +13,7 @@ import SantriManagement from "./admin/SantriManagement";
 import SantriFormModal from "./admin/SantriFormModal";
 import UangSakuManagement from "./admin/UangSakuManagement";
 import UangSakuFormModal from "./admin/UangSakuFormModal";
-import LaundryPaymentManagement from "./admin/LaundryPaymentManagement";
-import LaundryTransactionHistory from "./admin/LaundryTransactionHistory";
+import LaundryManagementPage from "./admin/LaundryManagementPage";
 import LaundryPaymentFormModal from "./admin/LaundryPaymentFormModal";
 import LaundryTransactionFormModal from "./admin/LaundryTransactionFormModal";
 
@@ -344,7 +343,6 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
   ]);
 
   // Laundry state
-  const [activeLaundryTab, setActiveLaundryTab] = useState("payment");
   const [isLaundryPaymentModalOpen, setIsLaundryPaymentModalOpen] = useState(false);
   const [isLaundryTransactionModalOpen, setIsLaundryTransactionModalOpen] = useState(false);
   
@@ -817,60 +815,16 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
             />
           )}
           {activeMenu === 'laundry' && (
-            <div className="space-y-6">
-              <div className="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
-                <h1 className="text-3xl font-bold text-white mb-6">Menu Laundry</h1>
-                
-                <div className="flex flex-wrap border-b border-slate-700">
-                  <button
-                    className={`py-2 px-4 text-sm font-medium ${
-                      activeLaundryTab === "payment"
-                        ? "border-b-2 border-emerald-500 text-emerald-400"
-                        : "text-slate-400 hover:text-slate-300"
-                    }`}
-                    onClick={() => setActiveLaundryTab("payment")}
-                  >
-                    Pembayaran Bulanan
-                  </button>
-                  <button
-                    className={`py-2 px-4 text-sm font-medium ${
-                      activeLaundryTab === "history"
-                        ? "border-b-2 border-emerald-500 text-emerald-400"
-                        : "text-slate-400 hover:text-slate-300"
-                    }`}
-                    onClick={() => setActiveLaundryTab("history")}
-                  >
-                    Riwayat Transaksi
-                  </button>
-                </div>
-              </div>
-
-              {activeLaundryTab === "payment" && (
-                <LaundryPaymentManagement
-                  onEditModalOpen={openEditLaundryPaymentModal}
-                  laundryClasses={laundryPaymentClasses}
-                  onDeleteClass={handleDeleteLaundryPaymentClass}
-                  onAddNewClass={() => {
-                    setLaundryPaymentModalMode("add");
-                    setIsLaundryPaymentModalOpen(true);
-                  }}
-                  onViewDetails={handleViewDetails}
-                />
-              )}
-
-              {activeLaundryTab === "history" && (
-                <LaundryTransactionHistory
-                  onEditModalOpen={openEditLaundryTransactionModal}
-                  transactions={laundryTransactions}
-                  onDeleteTransaction={handleDeleteLaundryTransaction}
-                  onAddNewTransaction={() => {
-                    setLaundryTransactionModalMode("add");
-                    setIsLaundryTransactionModalOpen(true);
-                  }}
-                  onViewDetails={handleViewDetails}
-                />
-              )}
-            </div>
+            <LaundryManagementPage
+              onEditModalOpen={openEditLaundryPaymentModal}
+              laundryClasses={laundryPaymentClasses}
+              onDeleteClass={handleDeleteLaundryPaymentClass}
+              onAddNewClass={() => {
+                setLaundryPaymentModalMode("add");
+                setIsLaundryPaymentModalOpen(true);
+              }}
+              onViewDetails={handleViewDetails}
+            />
           )}
         </main>
       </div>
