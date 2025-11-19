@@ -365,20 +365,20 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     {
       id: 1,
       name: "Class X",
-      monthlyPrice: "Rp 50.000",
-      yearlyPrice: "Rp 600.000"
+      monthlyPrice: "Rp 100.000",
+      yearlyPrice: "Rp 1.200.000"
     },
     {
       id: 2,
       name: "Class XI",
-      monthlyPrice: "Rp 55.000",
-      yearlyPrice: "Rp 660.000"
+      monthlyPrice: "Rp 100.000",
+      yearlyPrice: "Rp 1.200.000"
     },
     {
       id: 3,
       name: "Class XII",
-      monthlyPrice: "Rp 60.000",
-      yearlyPrice: "Rp 720.000"
+      monthlyPrice: "Rp 100.000",
+      yearlyPrice: "Rp 1.200.000"
     }
   ]);
 

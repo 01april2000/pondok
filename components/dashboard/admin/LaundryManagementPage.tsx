@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, X, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Pagination,
@@ -146,6 +146,26 @@ export default function LaundryManagementPage({
         december: false
       },
       yearlyPayment: false
+    },
+    {
+      id: 5,
+      name: "Andi Pratama",
+      className: "Class XI",
+      monthlyPayments: {
+        january: false,
+        february: false,
+        march: false,
+        april: false,
+        may: false,
+        june: false,
+        july: false,
+        august: false,
+        september: false,
+        october: false,
+        november: false,
+        december: false
+      },
+      yearlyPayment: false
     }
   ];
 
@@ -170,6 +190,13 @@ export default function LaundryManagementPage({
   };
 
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+
+  // Function to check if student has paid for laundry service
+  const hasPaidForLaundry = (student: StudentLaundryPayment) => {
+    // Check if student has paid for at least one month or has yearly payment
+    const hasMonthlyPayment = Object.values(student.monthlyPayments).some(payment => payment);
+    return hasMonthlyPayment || student.yearlyPayment;
+  };
 
   // Filter student payments based on search term
   const filteredStudentPayments = studentLaundryPayments.filter((student) =>
@@ -343,16 +370,22 @@ export default function LaundryManagementPage({
                       <td className="px-4 py-3 text-sm text-slate-100">{student.className}</td>
                       {months.slice(0, 6).map((month) => (
                         <td key={month.key} className="px-4 py-3 text-sm">
-                          <button
-                            onClick={() => toggleMonthlyPayment(student.id, month.key as keyof MonthlyPayment)}
-                            className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
-                              student.monthlyPayments[month.key as keyof MonthlyPayment]
-                                ? 'bg-emerald-500 border-emerald-500 text-white'
-                                : 'bg-slate-600 border-slate-500 hover:border-emerald-400'
-                            }`}
-                          >
-                            {student.monthlyPayments[month.key as keyof MonthlyPayment] && <Check className="w-4 h-4" />}
-                          </button>
+                          {hasPaidForLaundry(student) ? (
+                            <button
+                              onClick={() => toggleMonthlyPayment(student.id, month.key as keyof MonthlyPayment)}
+                              className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
+                                student.monthlyPayments[month.key as keyof MonthlyPayment]
+                                  ? 'bg-emerald-500 border-emerald-500 text-white'
+                                  : 'bg-slate-600 border-slate-500 hover:border-emerald-400'
+                              }`}
+                            >
+                              {student.monthlyPayments[month.key as keyof MonthlyPayment] && <Check className="w-4 h-4" />}
+                            </button>
+                          ) : (
+                            <div className="w-6 h-6 rounded-md border-2 flex items-center justify-center bg-slate-700 border-slate-600">
+                              <XCircle className="w-4 h-4 text-red-500" />
+                            </div>
+                          )}
                         </td>
                       ))}
                     </tr>
@@ -453,16 +486,22 @@ export default function LaundryManagementPage({
                         <td className="px-4 py-3 text-sm text-slate-100">{student.className}</td>
                         {months.map((month) => (
                           <td key={month.key} className="px-4 py-3 text-sm text-center">
-                            <button
-                              onClick={() => toggleMonthlyPayment(student.id, month.key as keyof MonthlyPayment)}
-                              className={`w-6 h-6 rounded-md border-2 flex items-center justify-center mx-auto transition-colors ${
-                                student.monthlyPayments[month.key as keyof MonthlyPayment]
-                                  ? 'bg-emerald-500 border-emerald-500 text-white'
-                                  : 'bg-slate-600 border-slate-500 hover:border-emerald-400'
-                              }`}
-                            >
-                              {student.monthlyPayments[month.key as keyof MonthlyPayment] && <Check className="w-4 h-4" />}
-                            </button>
+                            {hasPaidForLaundry(student) ? (
+                              <button
+                                onClick={() => toggleMonthlyPayment(student.id, month.key as keyof MonthlyPayment)}
+                                className={`w-6 h-6 rounded-md border-2 flex items-center justify-center mx-auto transition-colors ${
+                                  student.monthlyPayments[month.key as keyof MonthlyPayment]
+                                    ? 'bg-emerald-500 border-emerald-500 text-white'
+                                    : 'bg-slate-600 border-slate-500 hover:border-emerald-400'
+                                }`}
+                              >
+                                {student.monthlyPayments[month.key as keyof MonthlyPayment] && <Check className="w-4 h-4" />}
+                              </button>
+                            ) : (
+                              <div className="w-6 h-6 rounded-md border-2 flex items-center justify-center mx-auto bg-slate-700 border-slate-600">
+                                <XCircle className="w-4 h-4 text-red-500" />
+                              </div>
+                            )}
                           </td>
                         ))}
                         <td className="px-4 py-3 text-sm text-center">
