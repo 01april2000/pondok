@@ -215,7 +215,9 @@ export default function LaundryManagementPage({
   };
 
   return (
-    <div className="space-y-6">
+    <>
+      <ScrollArea className="h-[calc(100vh-150px)]">
+        <div className="space-y-6">
       {/* Laundry Class Management */}
       <div className="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
@@ -230,8 +232,9 @@ export default function LaundryManagementPage({
           </Button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-slate-800">
+        <ScrollArea className="w-full rounded-md border border-slate-700">
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-slate-800">
             <thead>
               <tr className="bg-slate-700 text-slate-300 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left">ID</th>
@@ -314,8 +317,9 @@ export default function LaundryManagementPage({
                 </tr>
               )}
             </tbody>
-          </table>
-        </div>
+            </table>
+          </div>
+        </ScrollArea>
       </div>
 
       {/* Monthly Payment Tracking */}
@@ -348,8 +352,9 @@ export default function LaundryManagementPage({
           </div>
         </div>
         <div className="p-6">
-          <div className="overflow-x-auto">
-            <table className="w-full table-auto">
+          <ScrollArea className="w-full rounded-md border border-slate-700">
+            <div className="overflow-x-auto">
+              <table className="w-full table-auto">
               <thead>
                 <tr className="bg-slate-900/50">
                   <th className="px-4 py-3 text-left text-sm font-medium text-slate-200">Nama Siswa</th>
@@ -398,8 +403,9 @@ export default function LaundryManagementPage({
                   </tr>
                 )}
               </tbody>
-            </table>
-          </div>
+              </table>
+            </div>
+          </ScrollArea>
           
           {/* Pagination for Monthly Payments */}
           {monthlyTotalPages > 1 && (
@@ -532,6 +538,8 @@ export default function LaundryManagementPage({
           </div>
         </div>
       )}
-    </div>
+        </div>
+      </ScrollArea>
+    </>
   );
 }

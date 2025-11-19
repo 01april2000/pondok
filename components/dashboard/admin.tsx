@@ -16,6 +16,8 @@ import UangSakuFormModal from "./admin/UangSakuFormModal";
 import LaundryManagementPage from "./admin/LaundryManagementPage";
 import LaundryPaymentFormModal from "./admin/LaundryPaymentFormModal";
 import LaundryTransactionFormModal from "./admin/LaundryTransactionFormModal";
+import UserManagement from "./admin/UserManagement";
+import UserFormModal from "./admin/UserFormModal";
 
 interface MenuItem {
   key: string;
@@ -432,6 +434,74 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     { id: 8, name: "Fitri Handayani", class: "X-D" }
   ]);
 
+  // User management state
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      name: "Ahmad Fauzi",
+      email: "ahmad.fauzi@example.com",
+      password: "password123",
+      phone: "+62 812-3456-7890",
+      role: "admin" as const,
+      created_at: "2023-01-15T10:30:00Z",
+      updated_at: "2023-11-15T14:20:00Z"
+    },
+    {
+      id: 2,
+      name: "Siti Nurhaliza",
+      email: "siti.nurhaliza@example.com",
+      password: "password456",
+      phone: "+62 813-5678-9012",
+      role: "bendahara-smk" as const,
+      created_at: "2023-02-20T09:15:00Z",
+      updated_at: "2023-11-10T16:45:00Z"
+    },
+    {
+      id: 3,
+      name: "Budi Santoso",
+      email: "budi.santoso@example.com",
+      password: "password789",
+      phone: "+62 814-7890-1234",
+      role: "santri" as const,
+      created_at: "2023-03-10T13:45:00Z",
+      updated_at: "2023-11-12T11:30:00Z"
+    },
+    {
+      id: 4,
+      name: "Rina Wijaya",
+      email: "rina.wijaya@example.com",
+      password: "password321",
+      phone: "+62 815-9012-3456",
+      role: "santri" as const,
+      created_at: "2023-04-05T14:20:00Z",
+      updated_at: "2023-11-08T09:15:00Z"
+    },
+    {
+      id: 5,
+      name: "Andi Pratama",
+      email: "andi.pratama@example.com",
+      password: "password654",
+      phone: "+62 816-0123-4567",
+      role: "bendahara-smp" as const,
+      created_at: "2023-05-12T11:30:00Z",
+      updated_at: "2023-11-14T15:50:00Z"
+    },
+    {
+      id: 6,
+      name: "Dewi Lestari",
+      email: "dewi.lestari@example.com",
+      password: "password987",
+      phone: "+62 817-2345-6789",
+      role: "bendahara-pondok" as const,
+      created_at: "2023-06-18T08:45:00Z",
+      updated_at: "2023-11-16T12:30:00Z"
+    }
+  ]);
+  
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [userModalMode, setUserModalMode] = useState<"add" | "edit">("add");
+  const [editingUser, setEditingUser] = useState<any>(null);
+
   const handleMenuClick = (menuKey: string, hasSubmenu = false) => {
     setActiveMenu(menuKey);
     if (hasSubmenu) {
@@ -749,6 +819,52 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
     }
   };
 
+  // User management handlers
+  const openEditUserModal = (user: any) => {
+    setEditingUser(user);
+    setUserModalMode("edit");
+    setIsUserModalOpen(true);
+  };
+
+  const handleSaveUser = (user: any) => {
+    if (userModalMode === "edit") {
+      setUsers(prevUsers =>
+        prevUsers.map(item =>
+          item.id === editingUser.id ? {
+            ...user,
+            id: editingUser.id,
+            created_at: editingUser.created_at
+          } : item
+        )
+      );
+    } else {
+      // Add new user
+      const newUser = {
+        ...user,
+        id: Math.max(...users.map(u => u.id)) + 1
+      };
+      setUsers(prevUsers => [...prevUsers, newUser]);
+    }
+    setIsUserModalOpen(false);
+  };
+
+  const handleDeleteUser = (id: number) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      setUsers(prevUsers =>
+        prevUsers.filter(user => user.id !== id)
+      );
+    }
+  };
+
+  const openAddUserDialog = () => {
+    setUserModalMode("add");
+    setIsUserModalOpen(true);
+  };
+
+  const handleViewUserDetails = (user: any) => {
+    alert(`User Details:\n\nName: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}\nRole: ${user.role}\nCreated: ${new Date(user.created_at).toLocaleString()}\nUpdated: ${new Date(user.updated_at).toLocaleString()}`);
+  };
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Sidebar */}
@@ -826,6 +942,15 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
               onViewDetails={handleViewDetails}
             />
           )}
+          {activeMenu === 'user-management' && (
+            <UserManagement
+              users={users}
+              onEditModalOpen={openEditUserModal}
+              onAddNewUser={openAddUserDialog}
+              onDeleteUser={handleDeleteUser}
+              onViewDetails={handleViewUserDetails}
+            />
+          )}
         </main>
       </div>
 
@@ -897,6 +1022,15 @@ export default function Admin({ initialActiveMenu = "spp" }: AdminProps) {
         onSubmit={handleSaveLaundryTransaction}
         santriList={laundrySantriList}
         laundryServices={laundryServices}
+      />
+
+      {/* User Form Modal (Add/Edit) */}
+      <UserFormModal
+        isOpen={isUserModalOpen}
+        onClose={() => setIsUserModalOpen(false)}
+        mode={userModalMode}
+        initialData={userModalMode === "edit" ? editingUser : undefined}
+        onSubmit={handleSaveUser}
       />
     </div>
   );
